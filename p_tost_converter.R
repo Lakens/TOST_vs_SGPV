@@ -25,15 +25,15 @@ pTOST_converter=function(p_tost,
   # computing I
   dist <- t * sd/sqrt(n) # how far is I from the closest eqbound?
   
-  #LAKENS: I think this is not right - you can't know based on non-sig if bound is left or right from alpha. 
+  #LAKENS: I I fixed this now - you can't know based on non-sig if bound is left or right from alpha. 
   #It should be based on whether p is larger or smaller than 0.5. I smaller than 0.5, bound - dist. 
   if (bound=="low") {
-    if (p_tost < alpha){I = low_eqbound + dist}
-    if (p_tost > alpha){I = low_eqbound - dist}} 
+    if (p_tost < 0.5){I = low_eqbound + dist}
+    if (p_tost > 0.5){I = low_eqbound - dist}} 
   
   if (bound=="high") {
-    if (p_tost < alpha){I = high_eqbound - dist}
-    if (p_tost > alpha){I = high_eqbound + dist}}
+    if (p_tost < 0.5){I = high_eqbound - dist}
+    if (p_tost > 0.5){I = high_eqbound + dist}}
   
   # Computing the CI around I
   lb <- I - qt(1 - alpha/2, df = n - 1) * sd/sqrt(n) # lower bound
