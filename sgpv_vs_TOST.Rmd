@@ -1,0 +1,189 @@
+---
+title: "The Second Generation P-Value is Old Wine in New Bottles"
+author: "Daniël Lakens"
+date: "1 juli 2018"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r, include=FALSE}
+library(TOSTER)
+```
+
+
+```{r, include=FALSE}
+#Create SGPV funtion from https://github.com/LucyMcGowan/sgpvalue/blob/master/R/p_delta.R
+
+#' Second Generation P-value
+p_delta <- function(lb, ub, delta_lb, delta_ub) {
+  
+  # special case: infinite CI and H0 bounds in the same direction
+  if ((delta_lb == -Inf & lb == -Inf) | (delta_ub == Inf & ub == Inf)) {
+    return(1)
+  }
+  
+  # usual case: non-point CI & non-point Ho
+  # pdelta = |CI intersect Ho| / min{ |CI|, 2|Ho| }
+  if (delta_lb != delta_ub & lb != ub) {
+    if (lb > delta_ub | ub < delta_lb) {
+      return(0)
+    } else if(lb > delta_lb & ub < delta_ub){
+      return(1)
+    } else {
+      return(
+        (min(ub, delta_ub) - max(lb, delta_lb)) /
+          min(ub - lb, 2 * (delta_ub - delta_lb))
+      )
+    }
+  }
+  
+  # special case 1: point CI, w/ or w/out a point H0
+  # pdelta = 0 if CI is inside the Ho
+  # pdelta = 1 if CI is inside the Ho
+  if (lb == ub) {
+    if (lb <= delta_ub & lb >= delta_lb){
+      return(1)
+    } else {
+      return(0)
+    }
+  }
+  
+  # special case 2: point H0 & non-point CI
+  # pdelta = 1/2 if H0 is inside the CI
+  # pdelta = 0 if H0 is outside the CI
+  if (delta_lb == delta_ub & lb != ub) {
+    if (delta_lb <= ub & delta_lb >= lb) {
+      return(1/2)
+    } else {
+      return(0)
+    }
+  }
+}
+```
+
+The second generation p-value (SGPV) is the proportion of data-supported hypotheses that are also null hypotheses (Blume, McGowan, Dupont, & Greevy, (2018). The authors note that: "Using second-generation p-values can only improve rigor, reproducibility and transparency across science." 
+It was quickly noted on Twitter that the SGPV is similar to equivalence testing (https://twitter.com/statsepi/status/997759878503550976, https://twitter.com/lakens/status/995171827692515328). 
+
+In the plot below I calculate p-values for the TOST equivalence testing procedure, and plot the SGPV for the same tests:
+
+```{r, include=FALSE}
+step = 0.01
+
+p_tost_list <- numeric(length(seq(140, 146, step)))
+sgpv_list <- numeric(length(seq(140, 146, step)))
+p_list <- numeric(length(seq(140, 146, step)))
+t_list <- numeric(length(seq(140, 146, step)))
+
+count <- 0
+
+for(i in seq(140, 146, step)){
+  count <- count + 1
+  m <- i
+  mu <- 146
+  sd <- 800
+  n <- 1000000
+  low_eqbound = -2 
+  high_eqbound = 2 
+  alpha = 0.05
+   
+  invisible(capture.output(res <- TOSTone.raw(m = m, 
+                                              mu = mu,
+                                              sd = sd, 
+                                              n = n, 
+                                              low_eqbound = low_eqbound, 
+                                              high_eqbound = high_eqbound, 
+                                              alpha = alpha,
+                                              plot = FALSE
+  )))
+  t <- (m - mu)/(sd/sqrt(n))
+  t_list[count] <- t
+  sgpv_list[count] <- p_delta(mu+res$LL_CI_TTEST, mu+res$UL_CI_TTEST, mu+low_eqbound, mu+high_eqbound)
+  p_tost_list[count] <- max(res$TOST_p1, res$TOST_p2)
+  p_list[count] <- 2 * pt(-abs(t), df = n-1)
+}
+```
+
+```{r sgpv_tost, echo=FALSE}
+plot(sgpv_list, type="l", col = "blue")
+lines(p_tost_list)
+```
+
+For ease of comparison, let me repeat the plot, now showing 1-TOST p-values:
+
+```{r 1-sgpv_tost, echo=FALSE}
+plot(sgpv_list, type="l", col = "blue")
+lines(1-p_tost_list)
+```
+
+It is clear there is overlap. Some orientation in this plot. When the TOST p-value is 0.5, the SGPV is 0.5. This is because when the 95% CI overlaps 50% with the equivalence region, it falls exactly on the lowerbound. When this is the case, the probability of observing data as or more extreme as the data observed is also exactly 50%, and thus the TOST p-value is 0.5 as well. 
+
+Two other points always have to overlap. When the 95% CI falls completely inside the equivalence region, The TOST using a 95% (instead of the typical 90% CI) should be significant at the 5% level. Since TOST in this simulation uses a 90% CI, we can halve the alpha level, and thus we should expect that when the SGPV is is 1, and the 95% just touches the lower bound (around index 558) the TOST p-value is 2.5% (or 1-0.025=0.975 in the second plot). The opposite is also true: When the SGPV is changes from 0 to a positive value (around index 245) the 95% CI touches the outside of the lower bound, and the TOST p-value will be 0.975 (or in the lower plot showing 1-p_TOST, 0.025). 
+
+We can see SGPV is a straight line between these points, because each trial, the observed difference moves from m = 140 to 146 in steps of 0.01. When m = 146, there is perfect equivalence (since we are testing against a value of 146 in the one-sided test).
+
+The only thing we need to explain is why the TOST p-value is curved, where the SGPV is a straight line as we reduce the mean difference with 0.01 steps as the index increases. The difference is that SGPV is a proportion from 0 to 1 (with it being 0 when there is no overlap, and 1 if there is perfect overlap) while the TOST p-value is a probability, which is never exactly 0 or one (but can get really close).
+
+Let's look at an example, and write in full the calculation for the SGPV. We should be able to link it to the calculation for the TOST p-value.
+
+```{r}
+m <- 146
+mu <- 144.5
+sd <- 500
+n <- 1000000
+low_eqbound = -2 
+high_eqbound = 2 
+alpha = 0.05
+
+res <- TOSTone.raw(m = m, 
+                   mu = mu,
+                   sd = sd, 
+                   n = n, 
+                   low_eqbound = low_eqbound, 
+                   high_eqbound = high_eqbound, 
+                   alpha = alpha
+)
+
+p_tost <- res$TOST_p2
+p_delta(mu + res$LL_CI_TTEST,
+        mu + res$UL_CI_TTEST, 
+        mu + low_eqbound, 
+        mu + high_eqbound)
+
+#SGPV
+ll_ci <- (m - mu)-(1.96*(sd/sqrt(n)))
+ul_ci <- (m - mu)+(1.96*(sd/sqrt(n)))
+
+(min(ul_ci, high_eqbound) - max(ll_ci, low_eqbound)) / min(ul_ci - ll_ci, 2 * (high_eqbound - low_eqbound))
+
+#The TOST p-value is calculated as: 
+
+t <- (m - mu - low_eqbound)/(sd/sqrt(n))
+p <- pt(t, n-1, lower.tail = FALSE)
+p
+
+pTOST_converter(p_tost=res$TOST_p2,
+                bound = "high",
+                sd = sd,
+                n = n,
+                alpha = alpha,
+                low_eqbound = low_eqbound,
+                high_eqbound = high_eqbound)
+
+
+
+```
+
+It should be possible to compute how these two are directly related, to calculate the one in the other! But how? 
+
+
+
+
+#References
+
+Blume, J. D., McGowan, L. D., Dupont, W. D., & Greevy, R. A. (2018). Second-generation p-values: Improved rigor, reproducibility, & transparency in statistical analyses. PLOS ONE, 13(3), e0188299. https://doi.org/10.1371/journal.pone.0188299
+
+
