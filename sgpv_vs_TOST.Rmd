@@ -1,6 +1,6 @@
 ---
-title: "The Second Generation P-Value is Old Wine in New Bottles"
-author: "Daniël Lakens"
+title: "Equivalence Testing and the Second Generation P-Value"
+author: "Daniël Lakens & Marie Delacre"
 date: "1 juli 2018"
 output: html_document
 editor_options: 
@@ -63,6 +63,49 @@ p_delta <- function(lb, ub, delta_lb, delta_ub) {
     }
   }
 }
+
+#Code to calculate SGPV fron TOST results
+# Input parameters
+# res = the stored results from the TOST analysis
+# n is the sample size
+# sd is the standard deviation
+#-----------------------------------------------------------------------
+TOST_to_SGPV <- function(tost_res){
+  
+  # computing t, based on p_tost
+  t <- min(tost_res$TOST_t1, tost_res$TOST_t2) 
+  
+  n <- tost_res$TOST_df + 1
+  sd <- (tost_res$diff-tost_res$low_eqbound)/tost_res$TOST_t1 * sqrt(n)
+  
+  # computing I
+  dist <- t * sd/sqrt(n) # how far is I from the closest eqbound?
+  
+  #LAKENS: I I fixed this now - you can't know based on non-sig if bound is left or right from alpha. 
+  #It should be based on whether p is larger or smaller than 0.5. I smaller than 0.5, bound - dist. 
+  if (tost_res$TOST_p1 > tost_res$TOST_p2) {
+    if (tost_res$TOST_p1 < 0.5){I = tost_res$low_eqbound + dist}
+    if (tost_res$TOST_p1 > 0.5){I = tost_res$low_eqbound - dist}} 
+  
+  if (tost_res$TOST_p2 > tost_res$TOST_p1) {
+    if (tost_res$TOST_p2 < 0.5){I = tost_res$low_eqbound - dist}
+    if (tost_res$TOST_p2 > 0.5){I = tost_res$low_eqbound + dist}} 
+  
+  # Computing the CI around I
+  lb <- I - qt(1 - tost_res$alpha/2, df = n - 1) * sd/sqrt(n) # lower bound
+  ub <- I + qt(1 - tost_res$alpha/2, df = n - 1) * sd/sqrt(n) # upper bound
+  
+  if (lb > tost_res$high_eqbound | ub < tost_res$low_eqbound){
+    SGPV = 0
+    } 
+  else if(lb > tost_res$low_eqbound & ub < tost_res$high_eqbound){
+    SGPV = 1
+    } 
+  else {SGPV <- (min(ub, tost_res$high_eqbound) - max(lb, tost_res$low_eqbound))/min(ub - lb, 2 * (tost_res$high_eqbound - tost_res$low_eqbound))}
+  
+  return(SGPV)
+}
+
 ```
 
 The second generation p-value (SGPV) is the proportion of data-supported hypotheses that are also null hypotheses (Blume, McGowan, Dupont, & Greevy, (2018). The authors note that: "Using second-generation p-values can only improve rigor, reproducibility and transparency across science." 
@@ -138,7 +181,7 @@ low_eqbound = -2
 high_eqbound = 2 
 alpha = 0.05
 
-res <- TOSTone.raw(m = m, 
+tost_res <- TOSTone.raw(m = m, 
                    mu = mu,
                    sd = sd, 
                    n = n, 
@@ -147,42 +190,153 @@ res <- TOSTone.raw(m = m,
                    alpha = alpha
 )
 
-p_tost <- res$TOST_p2
-p_delta(mu + res$LL_CI_TTEST,
-        mu + res$UL_CI_TTEST, 
-        mu + low_eqbound, 
-        mu + high_eqbound)
 
-#SGPV
-ll_ci <- (m - mu)-(1.96*(sd/sqrt(n)))
-ul_ci <- (m - mu)+(1.96*(sd/sqrt(n)))
-
-(min(ul_ci, high_eqbound) - max(ll_ci, low_eqbound)) / min(ul_ci - ll_ci, 2 * (high_eqbound - low_eqbound))
-
-#The TOST p-value is calculated as: 
-
-t <- (m - mu - low_eqbound)/(sd/sqrt(n))
-p <- pt(t, n-1, lower.tail = FALSE)
-p
-
-pTOST_converter(p_tost=res$TOST_p2,
-                bound = "high",
-                sd = sd,
-                n = n,
-                alpha = alpha,
-                low_eqbound = low_eqbound,
-                high_eqbound = high_eqbound)
-
-TOST_to_SGPV(tost_res = res,
-                sd = sd,
-                n = n)
+TOST_to_SGPV(tost_res = tost_res)
 
 
 ```
 
-It should be possible to compute how these two are directly related, to calculate the one in the other! But how? 
+The confidence interval width is a uniformly distributed across the mean differences, in the sense that as the true mean in a one-sample t-test gets closer to the test value (in the plot below, from situation A to D, the mean gets closer to the test value by 0.1) the difference in the overlap is stable.
+
+```{r}
+m <- 146
+mu <- 144.5
+sd <- 500
+n <- 1000000
+low_eqbound = -2 
+high_eqbound = 2 
+alpha = 0.05
+
+tost_res1 <- TOSTone.raw(m = m, 
+                   mu = mu,
+                   sd = sd, 
+                   n = n, 
+                   low_eqbound = low_eqbound, 
+                   high_eqbound = high_eqbound, 
+                   alpha = alpha
+)
+SGPV1 <- TOST_to_SGPV(tost_res = tost_res1)
+
+m <- 145.9
+mu <- 144.5
+sd <- 500
+n <- 1000000
+low_eqbound = -2 
+high_eqbound = 2 
+alpha = 0.05
+
+tost_res2 <- TOSTone.raw(m = m, 
+                   mu = mu,
+                   sd = sd, 
+                   n = n, 
+                   low_eqbound = low_eqbound, 
+                   high_eqbound = high_eqbound, 
+                   alpha = alpha
+)
+SGPV2 <- TOST_to_SGPV(tost_res = tost_res2)
+
+m <- 145.8
+mu <- 144.5
+sd <- 500
+n <- 1000000
+low_eqbound = -2 
+high_eqbound = 2 
+alpha = 0.05
+
+tost_res3 <- TOSTone.raw(m = m, 
+                   mu = mu,
+                   sd = sd, 
+                   n = n, 
+                   low_eqbound = low_eqbound, 
+                   high_eqbound = high_eqbound, 
+                   alpha = alpha
+)
+SGPV3 <- TOST_to_SGPV(tost_res = tost_res3)
+
+m <- 145.7
+mu <- 144.5
+sd <- 500
+n <- 1000000
+low_eqbound = -2 
+high_eqbound = 2 
+alpha = 0.05
+
+tost_res4 <- TOSTone.raw(m = m, 
+                   mu = mu,
+                   sd = sd, 
+                   n = n, 
+                   low_eqbound = low_eqbound, 
+                   high_eqbound = high_eqbound, 
+                   alpha = alpha
+)
+SGPV4 <- TOST_to_SGPV(tost_res = tost_res4)
+
+0.7551064 - 0.7040851
+0.6530639 - 0.6020426
 
 
+
+plot(NA, 
+     ylim = c(0, 1), 
+     xlim = c(-3, 3),
+     yaxt = "n",
+     ylab = "",
+     xlab = "Mean Difference")
+axis(2, at = c(0.2,0.4,0.6,0.8), labels = c("D", "C", "B", "A"), las = 1)
+abline(v = tost_res1$high_eqbound, 
+       lty = 2)
+abline(v = tost_res1$low_eqbound, 
+       lty = 2)
+abline(v = 0, 
+       lty = 2, 
+       col = "grey")
+
+points(x = tost_res4$diff, 
+       y = 0.2, 
+       pch = 15, 
+       cex = 2)
+segments(tost_res4$LL_CI_TOST, 
+         0.2, 
+         tost_res4$UL_CI_TOST, 
+         0.2, 
+         lwd = 3)
+
+
+points(x = tost_res3$diff, 
+       y = 0.4, 
+       pch = 15, 
+       cex = 2)
+segments(tost_res3$LL_CI_TOST, 
+         0.4, 
+         tost_res3$UL_CI_TOST, 
+         0.4, 
+         lwd = 3)
+
+points(x = tost_res2$diff, 
+       y = 0.6, 
+       pch = 15, 
+       cex = 2)
+segments(tost_res2$LL_CI_TOST, 
+         0.6, 
+         tost_res2$UL_CI_TOST, 
+         0.6, 
+         lwd = 3)
+
+points(x = tost_res1$diff, 
+       y = 0.8, 
+       pch = 15, 
+       cex = 2)
+segments(tost_res1$LL_CI_TOST, 
+         0.8, 
+         tost_res1$UL_CI_TOST, 
+         0.8, 
+         lwd = 3)
+
+
+
+```
+
+For example, the SGPV from A to D is `r SGPV1`, `r SGPV2`, `r SGPV3`, and `r SGPV4`. The difference in the percentage of overlap between A and B (`r SGPV1-SGPV2`) is identical to the difference in the percentage of overlap between C and D as the mean gets 0.1 closer to the test value (`r SGPV3-SGPV4`). 
 
 
 #References
