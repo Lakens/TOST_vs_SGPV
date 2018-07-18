@@ -2,9 +2,7 @@
 title: "Equivalence Testing and the Second Generation P-Value"
 author: "Daniël Lakens & Marie Delacre"
 date: "1 juli 2018"
-output: html_document
-editor_options: 
-  chunk_output_type: console
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
