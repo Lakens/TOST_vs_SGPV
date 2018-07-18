@@ -7,6 +7,7 @@ output: github_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+options(scipen=99)
 ```
 ```{r, include=FALSE}
 library(TOSTER)
@@ -68,23 +69,23 @@ source("TOST_to_SGPV.R")
 The second generation p-value (SGPV) is the proportion of data-supported hypotheses that are also null hypotheses (Blume, McGowan, Dupont, & Greevy, (2018). The authors note that: "Using second-generation p-values can only improve rigor, reproducibility and transparency across science." 
 It was quickly noted on Twitter that the SGPV is similar to equivalence testing (https://twitter.com/statsepi/status/997759878503550976, https://twitter.com/lakens/status/995171827692515328). 
 
-In the plot below I calculate p-values for the TOST equivalence testing procedure, and plot the SGPV for the same tests:
+In the plot below *p*-values are calculated for the TOST equivalence testing procedure where a true population mean ranging from 140 to 150 is compared to the test value of 145 in a one-sample equivalence test where equivalence bounds are set to difference of -2 and +2 around the test value of 145. In other words, the equivalence range in the test contains all means between 143 and 147. FOr clarity, sample sizes consist of 1000000 observations. The population standard deviation is set to 500. 
 
 ```{r, include=FALSE}
 step = 0.01
 
-p_tost_list <- numeric(length(seq(140, 146, step)))
-sgpv_list <- numeric(length(seq(140, 146, step)))
-p_list <- numeric(length(seq(140, 146, step)))
-t_list <- numeric(length(seq(140, 146, step)))
+p_tost_list <- numeric(length(seq(140, 150, step)))
+sgpv_list <- numeric(length(seq(140, 150, step)))
+p_list <- numeric(length(seq(140, 150, step)))
+t_list <- numeric(length(seq(140, 150, step)))
 
 count <- 0
 
-for(i in seq(140, 146, step)){
+for(i in seq(140, 150, step)){
   count <- count + 1
   m <- i
-  mu <- 146
-  sd <- 800
+  mu <- 145
+  sd <- 500
   n <- 1000000
   low_eqbound = -2 
   high_eqbound = 2 
@@ -107,22 +108,82 @@ for(i in seq(140, 146, step)){
 }
 ```
 
-```{r sgpv_tost, echo=FALSE}
-plot(sgpv_list, type="l", col = "blue")
-lines(p_tost_list)
+```{r sgpv_tost, echo=FALSE, dpi=600, fig.width=6, fig.height=5}
+plot(NA, 
+     ylim = c(0, 1), 
+     xlim = c(0, 1001),
+     yaxt = "n",
+     xaxt = "n",
+     ylab = "",
+     xlab = "Mean")
+axis(1, at = seq(0,1000,100), labels = seq(140,150,1), las = 1)
+axis(2, at = seq(0,1,0.1), labels = seq(0,1,0.1), las = 1)
+  
+lines(sgpv_list, type="l", col = "darkgrey", lwd = 3, lty = 3)
+lines(p_tost_list, lwd = 3)
 ```
 
-For ease of comparison, let me repeat the plot, now showing 1-TOST p-values:
+For ease of comparison we can reverse the SGPV (by calculating 1-SGPV). We see that 
 
-```{r 1-sgpv_tost, echo=FALSE}
-plot(sgpv_list, type="l", col = "blue")
-lines(1-p_tost_list)
+```{r 1-sgpv_tost, echo=FALSE, dpi=600, fig.width=6, fig.height=5}
+plot(NA, 
+     ylim = c(0, 1), 
+     xlim = c(0, 1001),
+     yaxt = "n",
+     xaxt = "n",
+     ylab = "",
+     xlab = "Mean")
+axis(1, at = seq(0,1000,100), labels = seq(140,150,1), las = 1)
+axis(2, at = seq(0,1,0.1), labels = seq(0,1,0.1), las = 1)
+  
+lines(1-sgpv_list, type="l", col = "darkgrey", lwd = 3, lty = 3)
+lines(p_tost_list, lwd = 3)
 ```
+```{r, include=FALSE}
+m <- 145
+mu <- 145
+sd <- 500
+n <- 1000000
+low_eqbound = -2 
+high_eqbound = 2 
+alpha = 0.05
+
+tost_res1 <- TOSTone.raw(m = m, 
+                   mu = mu,
+                   sd = sd, 
+                   n = n, 
+                   low_eqbound = low_eqbound, 
+                   high_eqbound = high_eqbound, 
+                   alpha = alpha
+)
+SGPV1 <- TOST_to_SGPV(tost_res = tost_res1)
+
+m <- 140
+mu <- 145
+sd <- 500
+n <- 1000000
+low_eqbound = -2 
+high_eqbound = 2 
+alpha = 0.05
+
+tost_res2 <- TOSTone.raw(m = m, 
+                   mu = mu,
+                   sd = sd, 
+                   n = n, 
+                   low_eqbound = low_eqbound, 
+                   high_eqbound = high_eqbound, 
+                   alpha = alpha
+)
+SGPV2 <- TOST_to_SGPV(tost_res = tost_res2)
+```
+
+When the population mean is 145, and we are testing against equivalence bounds of 143 and 147 using the TOST procedure for a one-sample *t*-test with a sample size of 1000000 and a standard deviation of 500, the equivalence test is significant, *t*(`r tost_res1$TOST_df`) = `r tost_res1$TOST_t1`, *p* = `r tost_res1$TOST_p1`. Because the 95% CI falls completely within the equivalence bounds, the SGPV is `r SGPV1`. 
+
+One the other hand, if the observed mean is 140, the equivalence test is not surprisingly not significant (the observed mean is far outside the equivalence range of 143 to 147), *t*(`r tost_res2$TOST_df`) = `r tost_res2$TOST_t1`, *p* = `r tost_res2$TOST_p1`. Because the 95% CI falls completely outside the equivalence bounds, the SGPV is `r SGPV2`. 
 
 ##SGPV as a uniform measure of overlap
 
-It is clear the SGPV and the p-value from TOST are closely related. We can think of the SGPV as a straight line that will always overlap the p-value from an equivalence test in 3 points. When the TOST p-value is 0.5, the SGPV is also 0.5. The SGPV is 50% when the observed mean falls exactly on the lower or upper equivalence bound. When the observed mean equals the equivalence bound, the difference between the mean in the data and the equivalence bound is 0, the *t*-value for the equivalence test is also so, and thus the *p*-value is 0.5. 
-
+It is clear the SGPV and the p-value from TOST are closely related. We can think of the SGPV as a straight line that will always overlap the *p*-value from an equivalence test in 3 points. When the TOST p-value is 0.5, the SGPV is also 0.5. The SGPV is 50% when the observed mean falls exactly on the lower or upper equivalence bound. When the observed mean equals the equivalence bound, the difference between the mean in the data and the equivalence bound is 0, the *t*-value for the equivalence test is also so, and thus the *p*-value is 0.5 (situation A). 
 ```{r, include=FALSE}
 m <- 146.5
 mu <- 144.5
@@ -183,9 +244,7 @@ SGPV3
 
 
 ```
-
-
-```{r, echo = FALSE}
+```{r, echo=FALSE, dpi=600, fig.width=5, fig.height=4}
 plot(NA, 
      ylim = c(0, 1), 
      xlim = c(-3, 5),
@@ -242,7 +301,6 @@ curve(dnorm(x, 2, 0.5), from=0.5, to=3.5, ylim = c(-6, 2), xlim = c(-3, 5), xlab
 Two other points always have to overlap. When the 95% CI falls completely, but only just inside the equivalence region, the TOST (which relies on a one-sided test) should be significant at an alpha level of 0.025. When the SGPV changes from 0.9999 to exactly 1 the 95% CI just touches the equivalence bound (see situation B in the plot above, where the 95% CI falls completely inside the equivalence bounds) the TOST *p*-value is 0.025. The third point where the SGPV and the *p*-value from the TOST procedure should overlap is where the SGPV  changes from a positive value (i.e., 0.0001) to 0 (when the 95% CI completely falls outside of the equivalence bound, see situation C in the plot above). When the 95% CI touches the outside of the equivalence bound and the TOST *p*-value will be 0.975. 
 
 The confidence interval width is a uniformly distributed across the mean differences, in the sense that as the true mean in a one-sample t-test gets closer to the test value (in the plot below, from situation A to D, the mean gets closer to the test value by 0.1) the difference in the overlap is stable.
-
 ```{r, include=FALSE}
 m <- 146
 mu <- 144.5
@@ -316,9 +374,7 @@ tost_res4 <- TOSTone.raw(m = m,
 )
 SGPV4 <- TOST_to_SGPV(tost_res = tost_res4)
 ```
-
-
-```{r, echo = FALSE}
+```{r, echo=FALSE, dpi=600, fig.width=5, fig.height=5}
 plot(NA, 
      ylim = c(0, 1), 
      xlim = c(-3, 3),
@@ -387,22 +443,20 @@ curve(dnorm(x, 1.5, 0.5), from=0, to=3, ylim = c(-8, 2), xlim = c(-3, 3), xlab =
 ```
 
 For example, the SGPV from A to D is `r SGPV1`, `r SGPV2`, `r SGPV3`, and `r SGPV4`. The difference in the percentage of overlap between A and B (`r SGPV1-SGPV2`) is identical to the difference in the percentage of overlap between C and D as the mean gets 0.1 closer to the test value (`r SGPV3-SGPV4`). 
-
-
-
-```{r}
+```{r , echo=FALSE}
 tail1 <- 1-pnorm(2, 1.5, 0.5)
 tail2 <- 1-pnorm(2, 1.4, 0.5)
 tail3 <- 1-pnorm(2, 1.3, 0.5)
 tail4 <- 1-pnorm(2, 1.2, 0.5)
-
-tail1-tail2
-tail3-tail4
-
-
-1-pnorm(1.96, 0, 1)
 ```
 
+As we move the means closer to the test value in steps of 0.1 across A to D the p-value calculated for normally distributed data is not uniformly distributed. The probability of observing data more extreme than the upper bound of 2 is (from A to D) `r tail1`, `r tail2`, `r tail3`, and `r tail4`. As we can see, the difference between A and B (`r tail1-tail2`) is not the same as the difference between C And D (`r tail3-tail4`). Indeed, the difference in *p*-values is the largest as you start at *p* = 0.5 (when the observed mean falls on the test value), which is why the line in Figure 1 is the steepest at p = 0.5. Note that where the SGPV reaches 1 or 0, *p*-values closely approximate 0 and 1, but never reach these values.     
+
+##What does SGPV add to Equivalence Testing?
+
+Given the strong relationship between SGPV and equivalence testing, a logical question is to ask what a SGPV adds to our statistical toolbox. First of all, SGPV is a descriptive statistic (unlike the *p*-value that is calculated for an equivalence test). As a descriptive statistic it is somewhat limited. SGPV is 1 for a range of values (see Figure 1) where the p-values for the TOST procedure range differ (e.g., different equivalence tests with *p* = 0.049 and *p* = 0.0001 have a SGPV of 1).
+
+Second, the SGPV 
 
 #References
 
