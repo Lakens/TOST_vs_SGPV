@@ -173,6 +173,9 @@ pTOST_converter(p_tost=res$TOST_p2,
                 low_eqbound = low_eqbound,
                 high_eqbound = high_eqbound)
 
+TOST_to_SGPV(tost_res = res,
+                sd = sd,
+                n = n)
 
 
 ```
