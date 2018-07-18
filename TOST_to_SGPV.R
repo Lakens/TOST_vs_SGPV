@@ -17,13 +17,13 @@ TOST_to_SGPV <- function(tost_res){
   
   #LAKENS: I I fixed this now - you can't know based on non-sig if bound is left or right from alpha. 
   #It should be based on whether p is larger or smaller than 0.5. I smaller than 0.5, bound - dist. 
-  if (tost_res$TOST_p1 > tost_res$TOST_p2) {
-    if (tost_res$TOST_p1 < 0.5){I = tost_res$low_eqbound + dist}
-    if (tost_res$TOST_p1 > 0.5){I = tost_res$low_eqbound - dist}} 
+  if (tost_res$TOST_p1 >= tost_res$TOST_p2) {
+    if (tost_res$TOST_p1 <= 0.5){I = tost_res$low_eqbound + dist}
+    if (tost_res$TOST_p1 >= 0.5){I = tost_res$low_eqbound - dist}} 
   
-  if (tost_res$TOST_p2 > tost_res$TOST_p1) {
-    if (tost_res$TOST_p2 < 0.5){I = tost_res$low_eqbound - dist}
-    if (tost_res$TOST_p2 > 0.5){I = tost_res$low_eqbound + dist}} 
+  if (tost_res$TOST_p2 >= tost_res$TOST_p1) {
+    if (tost_res$TOST_p2 <= 0.5){I = tost_res$low_eqbound - dist}
+    if (tost_res$TOST_p2 >= 0.5){I = tost_res$low_eqbound + dist}} 
   
   # Computing the CI around I
   lb <- I - qt(1 - tost_res$alpha/2, df = n - 1) * sd/sqrt(n) # lower bound

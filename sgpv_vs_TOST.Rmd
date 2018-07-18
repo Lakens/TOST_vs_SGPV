@@ -62,48 +62,7 @@ p_delta <- function(lb, ub, delta_lb, delta_ub) {
   }
 }
 
-#Code to calculate SGPV fron TOST results
-# Input parameters
-# res = the stored results from the TOST analysis
-# n is the sample size
-# sd is the standard deviation
-#-----------------------------------------------------------------------
-TOST_to_SGPV <- function(tost_res){
-  
-  # computing t, based on p_tost
-  t <- min(tost_res$TOST_t1, tost_res$TOST_t2) 
-  
-  n <- tost_res$TOST_df + 1
-  sd <- (tost_res$diff-tost_res$low_eqbound)/tost_res$TOST_t1 * sqrt(n)
-  
-  # computing I
-  dist <- t * sd/sqrt(n) # how far is I from the closest eqbound?
-  
-  #LAKENS: I I fixed this now - you can't know based on non-sig if bound is left or right from alpha. 
-  #It should be based on whether p is larger or smaller than 0.5. I smaller than 0.5, bound - dist. 
-  if (tost_res$TOST_p1 > tost_res$TOST_p2) {
-    if (tost_res$TOST_p1 < 0.5){I = tost_res$low_eqbound + dist}
-    if (tost_res$TOST_p1 > 0.5){I = tost_res$low_eqbound - dist}} 
-  
-  if (tost_res$TOST_p2 > tost_res$TOST_p1) {
-    if (tost_res$TOST_p2 < 0.5){I = tost_res$low_eqbound - dist}
-    if (tost_res$TOST_p2 > 0.5){I = tost_res$low_eqbound + dist}} 
-  
-  # Computing the CI around I
-  lb <- I - qt(1 - tost_res$alpha/2, df = n - 1) * sd/sqrt(n) # lower bound
-  ub <- I + qt(1 - tost_res$alpha/2, df = n - 1) * sd/sqrt(n) # upper bound
-  
-  if (lb > tost_res$high_eqbound | ub < tost_res$low_eqbound){
-    SGPV = 0
-    } 
-  else if(lb > tost_res$low_eqbound & ub < tost_res$high_eqbound){
-    SGPV = 1
-    } 
-  else {SGPV <- (min(ub, tost_res$high_eqbound) - max(lb, tost_res$low_eqbound))/min(ub - lb, 2 * (tost_res$high_eqbound - tost_res$low_eqbound))}
-  
-  return(SGPV)
-}
-
+source("TOST_to_SGPV.R")
 ```
 
 The second generation p-value (SGPV) is the proportion of data-supported hypotheses that are also null hypotheses (Blume, McGowan, Dupont, & Greevy, (2018). The authors note that: "Using second-generation p-values can only improve rigor, reproducibility and transparency across science." 
@@ -160,26 +119,20 @@ plot(sgpv_list, type="l", col = "blue")
 lines(1-p_tost_list)
 ```
 
-It is clear there is overlap. Some orientation in this plot. When the TOST p-value is 0.5, the SGPV is 0.5. This is because when the 95% CI overlaps 50% with the equivalence region, it falls exactly on the lowerbound. When this is the case, the probability of observing data as or more extreme as the data observed is also exactly 50%, and thus the TOST p-value is 0.5 as well. 
+##SGPV as a uniform measure of overlap
 
-Two other points always have to overlap. When the 95% CI falls completely inside the equivalence region, The TOST using a 95% (instead of the typical 90% CI) should be significant at the 5% level. Since TOST in this simulation uses a 90% CI, we can halve the alpha level, and thus we should expect that when the SGPV is is 1, and the 95% just touches the lower bound (around index 558) the TOST p-value is 2.5% (or 1-0.025=0.975 in the second plot). The opposite is also true: When the SGPV is changes from 0 to a positive value (around index 245) the 95% CI touches the outside of the lower bound, and the TOST p-value will be 0.975 (or in the lower plot showing 1-p_TOST, 0.025). 
+It is clear the SGPV and the p-value from TOST are closely related. We can think of the SGPV as a straight line that will always overlap the p-value from an equivalence test in 3 points. When the TOST p-value is 0.5, the SGPV is also 0.5. The SGPV is 50% when the observed mean falls exactly on the lower or upper equivalence bound. When the observed mean equals the equivalence bound, the difference between the mean in the data and the equivalence bound is 0, the *t*-value for the equivalence test is also so, and thus the *p*-value is 0.5. 
 
-We can see SGPV is a straight line between these points, because each trial, the observed difference moves from m = 140 to 146 in steps of 0.01. When m = 146, there is perfect equivalence (since we are testing against a value of 146 in the one-sided test).
-
-The only thing we need to explain is why the TOST p-value is curved, where the SGPV is a straight line as we reduce the mean difference with 0.01 steps as the index increases. The difference is that SGPV is a proportion from 0 to 1 (with it being 0 when there is no overlap, and 1 if there is perfect overlap) while the TOST p-value is a probability, which is never exactly 0 or one (but can get really close).
-
-Let's look at an example, and write in full the calculation for the SGPV. We should be able to link it to the calculation for the TOST p-value.
-
-```{r}
-m <- 146
+```{r, include=FALSE}
+m <- 146.5
 mu <- 144.5
 sd <- 500
 n <- 1000000
 low_eqbound = -2 
 high_eqbound = 2 
-alpha = 0.05
+alpha = 0.025
 
-tost_res <- TOSTone.raw(m = m, 
+tost_res1 <- TOSTone.raw(m = m, 
                    mu = mu,
                    sd = sd, 
                    n = n, 
@@ -187,16 +140,110 @@ tost_res <- TOSTone.raw(m = m,
                    high_eqbound = high_eqbound, 
                    alpha = alpha
 )
+SGPV1 <- TOST_to_SGPV(tost_res = tost_res1)
 
+m <- 145.520012
+mu <- 144.5
+sd <- 500
+n <- 1000000
+low_eqbound = -2 
+high_eqbound = 2 
+alpha = 0.025
 
-TOST_to_SGPV(tost_res = tost_res)
+tost_res2 <- TOSTone.raw(m = m, 
+                   mu = mu,
+                   sd = sd, 
+                   n = n, 
+                   low_eqbound = low_eqbound, 
+                   high_eqbound = high_eqbound, 
+                   alpha = alpha
+)
+SGPV2 <- TOST_to_SGPV(tost_res = tost_res2)
+SGPV2
+
+m <- 147.48
+mu <- 144.5
+sd <- 500
+n <- 1000000
+low_eqbound = -2 
+high_eqbound = 2 
+alpha = 0.025
+
+tost_res3 <- TOSTone.raw(m = m, 
+                   mu = mu,
+                   sd = sd, 
+                   n = n, 
+                   low_eqbound = low_eqbound, 
+                   high_eqbound = high_eqbound, 
+                   alpha = alpha
+)
+SGPV3 <- TOST_to_SGPV(tost_res = tost_res3)
+SGPV3
+
 
 
 ```
 
+
+```{r, echo = FALSE}
+plot(NA, 
+     ylim = c(0, 1), 
+     xlim = c(-3, 5),
+     yaxt = "n",
+     ylab = "",
+     xlab = "Mean Difference")
+axis(2, at = c(0.25,0.5,0.75), labels = c("C", "B", "A"), las = 1)
+axis(1, at = c(-3,-2,-1,0,1,2,3,4,5), las = 1)
+abline(v = tost_res1$high_eqbound, 
+       lty = 2)
+abline(v = tost_res1$low_eqbound, 
+       lty = 2)
+abline(v = 0, 
+       lty = 2, 
+       col = "grey")
+
+points(x = tost_res3$diff, 
+       y = 0.25, 
+       pch = 15, 
+       cex = 2)
+segments(tost_res3$LL_CI_TOST, 
+         0.25, 
+         tost_res3$UL_CI_TOST, 
+         0.25, 
+         lwd = 3)
+
+points(x = tost_res2$diff, 
+       y = 0.5, 
+       pch = 15, 
+       cex = 2)
+segments(tost_res2$LL_CI_TOST, 
+         0.5, 
+         tost_res2$UL_CI_TOST, 
+         0.5, 
+         lwd = 3)
+
+points(x = tost_res1$diff, 
+       y = 0.75, 
+       pch = 15, 
+       cex = 2)
+segments(tost_res1$LL_CI_TOST, 
+         0.75, 
+         tost_res1$UL_CI_TOST, 
+         0.75, 
+         lwd = 3)
+par(new=TRUE)
+curve(dnorm(x, 147.48 - 144.5, 0.5), from=1.5, to=4.5, ylim = c(-2, 6), xlim = c(-3, 5), xlab = "", ylab = "", axes = FALSE)
+par(new=TRUE)
+curve(dnorm(x, 145.520012 - 144.5, 0.5), from=-0.5, to=2.5, ylim = c(-4, 4), xlim = c(-3, 5), xlab = "", ylab = "", axes = FALSE)
+par(new=TRUE)
+curve(dnorm(x, 2, 0.5), from=0.5, to=3.5, ylim = c(-6, 2), xlim = c(-3, 5), xlab = "", ylab = "", axes = FALSE)
+```
+
+Two other points always have to overlap. When the 95% CI falls completely, but only just inside the equivalence region, the TOST (which relies on a one-sided test) should be significant at an alpha level of 0.025. When the SGPV changes from 0.9999 to exactly 1 the 95% CI just touches the equivalence bound (see situation B in the plot above, where the 95% CI falls completely inside the equivalence bounds) the TOST *p*-value is 0.025. The third point where the SGPV and the *p*-value from the TOST procedure should overlap is where the SGPV  changes from a positive value (i.e., 0.0001) to 0 (when the 95% CI completely falls outside of the equivalence bound, see situation C in the plot above). When the 95% CI touches the outside of the equivalence bound and the TOST *p*-value will be 0.975. 
+
 The confidence interval width is a uniformly distributed across the mean differences, in the sense that as the true mean in a one-sample t-test gets closer to the test value (in the plot below, from situation A to D, the mean gets closer to the test value by 0.1) the difference in the overlap is stable.
 
-```{r}
+```{r, include=FALSE}
 m <- 146
 mu <- 144.5
 sd <- 500
@@ -268,12 +315,10 @@ tost_res4 <- TOSTone.raw(m = m,
                    alpha = alpha
 )
 SGPV4 <- TOST_to_SGPV(tost_res = tost_res4)
-
-0.7551064 - 0.7040851
-0.6530639 - 0.6020426
+```
 
 
-
+```{r, echo = FALSE}
 plot(NA, 
      ylim = c(0, 1), 
      xlim = c(-3, 3),
@@ -331,10 +376,32 @@ segments(tost_res1$LL_CI_TOST,
          lwd = 3)
 
 
-
+par(new=TRUE)
+curve(dnorm(x, 1.2, 0.5), from=-0.3, to=2.7, ylim = c(-2, 8), xlim = c(-3, 3), xlab = "", ylab = "", axes = FALSE)
+par(new=TRUE)
+curve(dnorm(x, 1.3, 0.5), from=-0.2, to=2.8, ylim = c(-4, 6), xlim = c(-3, 3), xlab = "", ylab = "", axes = FALSE)
+par(new=TRUE)
+curve(dnorm(x, 1.4, 0.5), from=-0.1, to=2.9, ylim = c(-6, 4), xlim = c(-3, 3), xlab = "", ylab = "", axes = FALSE)
+par(new=TRUE)
+curve(dnorm(x, 1.5, 0.5), from=0, to=3, ylim = c(-8, 2), xlim = c(-3, 3), xlab = "", ylab = "", axes = FALSE)
 ```
 
 For example, the SGPV from A to D is `r SGPV1`, `r SGPV2`, `r SGPV3`, and `r SGPV4`. The difference in the percentage of overlap between A and B (`r SGPV1-SGPV2`) is identical to the difference in the percentage of overlap between C and D as the mean gets 0.1 closer to the test value (`r SGPV3-SGPV4`). 
+
+
+
+```{r}
+tail1 <- 1-pnorm(2, 1.5, 0.5)
+tail2 <- 1-pnorm(2, 1.4, 0.5)
+tail3 <- 1-pnorm(2, 1.3, 0.5)
+tail4 <- 1-pnorm(2, 1.2, 0.5)
+
+tail1-tail2
+tail3-tail4
+
+
+1-pnorm(1.96, 0, 1)
+```
 
 
 #References
