@@ -27,12 +27,13 @@ pTOST_converter=function(p_tost,
   
   #LAKENS: I I fixed this now - you can't know based on non-sig if bound is left or right from alpha. 
   #It should be based on whether p is larger or smaller than 0.5. I smaller than 0.5, bound - dist. 
+  # DELACRE: when p_tost = .5, t=0 and therefore dist=0 (as +0 = -0=0, I arbitrary changed "<" into "<=")
   if (bound=="low") {
-    if (p_tost < 0.5){I = low_eqbound + dist}
+    if (p_tost <= 0.5){I = low_eqbound + dist}
     if (p_tost > 0.5){I = low_eqbound - dist}} 
   
   if (bound=="high") {
-    if (p_tost < 0.5){I = high_eqbound - dist}
+    if (p_tost <= 0.5){I = high_eqbound - dist}
     if (p_tost > 0.5){I = high_eqbound + dist}}
   
   # Computing the CI around I
