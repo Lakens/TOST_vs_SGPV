@@ -1,7 +1,7 @@
 Equivalence Testing and the Second Generation P-Value
 ================
 Daniël Lakens & Marie Delacre
-19 juli 2018
+26 juli 2018
 
 The RMarkdown file with the reproducible code of this text is [here](https://github.com/Lakens/TOST_vs_SGPV/blob/master/sgpv_vs_TOST.Rmd).
 
@@ -55,7 +55,7 @@ The SGPV is 1 for tests where *p*-values for the TOST procedure differ. For exam
 Discussion
 ==========
 
-It seems Blume et a (2018) where not aware of the existence of equivalence tests, and we believe that our explanation of the similarities between the TOST procedure and the SGPV provides some useful context to interpret the contribution of second generation *p*values to the statistical toolbox. The novelty lies in its use as a descriptive statistic. The added benefit of calculating the proportion of overlap of a 95% CI with the equivalence range, and using this percentage to describe the data, remains somewhat unclear for practical puroposes. Nevertheless, our only goal is to clarify the relationship between a newly proposed statistic and the already existing TOST approach used to test for equivalence, and let researchers make an informed decision about which statistical approach provides the best answer to their question.
+It seems Blume et al (2018) where not aware of the existence of equivalence tests, and we believe that our explanation of the similarities between the TOST procedure and the SGPV provides some useful context to interpret the contribution of second generation *p*values to the statistical toolbox. The novelty lies in its use as a descriptive statistic. The added benefit of calculating the proportion of overlap of a 95% CI with the equivalence range, and using this percentage to describe the data, remains somewhat unclear for practical puroposes. Nevertheless, our only goal is to clarify the relationship between a newly proposed statistic and the already existing TOST approach used to test for equivalence, and let researchers make an informed decision about which statistical approach provides the best answer to their question.
 
 References
 ==========
