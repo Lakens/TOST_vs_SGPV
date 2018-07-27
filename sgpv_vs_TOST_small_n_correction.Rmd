@@ -1,0 +1,499 @@
+---
+title: "A Closer Look at SGPV's Small Sample Correction"
+author: "Daniël Lakens & Marie Delacre"
+date: "27 juli 2018"
+output: github_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(scipen=99)
+```
+```{r, include=FALSE}
+library(TOSTER)
+```
+
+
+```{r, include=FALSE}
+#Create SGPV funtion from https://github.com/LucyMcGowan/sgpvalue/blob/master/R/p_delta.R
+
+#' Second Generation P-value
+p_delta <- function(lb, ub, delta_lb, delta_ub) {
+  
+  # special case: infinite CI and H0 bounds in the same direction
+  if ((delta_lb == -Inf & lb == -Inf) | (delta_ub == Inf & ub == Inf)) {
+    return(1)
+  }
+  
+  # usual case: non-point CI & non-point Ho
+  # pdelta = |CI intersect Ho| / min{ |CI|, 2|Ho| }
+  if (delta_lb != delta_ub & lb != ub) {
+    if (lb > delta_ub | ub < delta_lb) {
+      return(0)
+    } else if(lb > delta_lb & ub < delta_ub){
+      return(1)
+    } else {
+      return(
+        (min(ub, delta_ub) - max(lb, delta_lb)) /
+          min(ub - lb, 2 * (delta_ub - delta_lb))
+      )
+    }
+  }
+  
+  # special case 1: point CI, w/ or w/out a point H0
+  # pdelta = 0 if CI is inside the Ho
+  # pdelta = 1 if CI is inside the Ho
+  if (lb == ub) {
+    if (lb <= delta_ub & lb >= delta_lb){
+      return(1)
+    } else {
+      return(0)
+    }
+  }
+  
+  # special case 2: point H0 & non-point CI
+  # pdelta = 1/2 if H0 is inside the CI
+  # pdelta = 0 if H0 is outside the CI
+  if (delta_lb == delta_ub & lb != ub) {
+    if (delta_lb <= ub & delta_lb >= lb) {
+      return(1/2)
+    } else {
+      return(0)
+    }
+  }
+}
+
+#In the code sent by Jeffrey Blume, the code is different than the GitHub code. The inout has different namens (and there are new parameters). But the old code reproduces the shared analyses.
+
+# Create function for Second Generation P-value ----
+sgpv <- function(est.lo, est.hi, null.lo, null.hi) {
+  
+  # special case: infinite CI and H0 bounds in the same direction
+  if ((null.lo == -Inf & est.lo == -Inf) | (null.hi == Inf & est.hi == Inf)) {
+    return(1)
+  }
+  
+  # usual case: non-point CI & non-point Ho
+  # pdelta = |CI intersect Ho| / min{ |CI|, 2|Ho| }
+  if (null.lo != null.hi & est.lo != est.hi) {
+    if (est.lo > null.hi | est.hi < null.lo) {
+      return(0)
+    } else if(est.lo > null.lo & est.hi < null.hi){
+      return(1)
+    } else {
+      return(
+        (min(est.hi, null.hi) - max(est.lo, null.lo)) /
+          min(est.hi - est.lo, 2 * (null.hi - null.lo))
+      )
+    }
+  }
+  
+  # special case 1: point CI, w/ or w/out a point H0
+  # pdelta = 0 if CI is inside the Ho
+  # pdelta = 1 if CI is inside the Ho
+  if (est.lo == est.hi) {
+    if (est.lo <= null.hi & est.lo >= null.lo){
+      return(1)
+    } else {
+      return(0)
+    }
+  }
+  
+  # special case 2: point H0 & non-point CI
+  # pdelta = 1/2 if H0 is inside the CI
+  # pdelta = 0 if H0 is outside the CI
+  if (null.lo == null.hi & est.lo != est.hi) {
+    if (null.lo <= est.hi & null.lo >= est.lo) {
+      return(1/2)
+    } else {
+      return(0)
+    }
+  }
+}
+
+
+
+source("TOST_to_SGPV.R")
+
+```
+
+Although the *p*-value from the TOST procedure follows the SGPV closely in the examples we discussed earlier, there is one situation in which the SGPV deviates strongly from the TOST *p*-value. Whenever the CI is more than twice as wide as the equivalence range, and the CI overlaps with the upper *and* lower equivalence bound, the normal calculation of the proportion of overlap is skipped, and the SGPV is set to 0.5 instead. Blume et al. (2018) call this the 'small sample correction factor'. However, it is not a correction in the typical use of the word, since the SGPV is not adjusted to any 'correct' value. When the normal calculation would be 'misleading' (i.e., the SGPV would be small, which normally would suggest support for the alternative hypothesis, when all values in the equivalence range are also supported), the SGPV is set to 0.5 which according to Blume ete a. (2018) signal the SGPV is 'uninformative'. Note that the CI can be twice as wide as the equivalence range whenever the sample size is small (and the confidence interval width is large) *or* when then equivalence range is narrow. It is therefore not so much a 'small sample correction' as it is an exception to the typical calculation of the SGPV whenever the ratio of the confidence interval width to the equivalence range exceeds 2:1 and the CI overlaps with the upper and lower bounds. 
+
+```{r, include=FALSE}
+m <- 0.5
+n <- 10
+sd <- 1.5
+d.lo <- -0.5*0.75
+d.hi <- 0.5*0.75
+
+tost_res1 <- TOSTone.raw(m = m, 
+                         mu = 0,
+                         sd = sd,
+                         n = n,
+                         low_eqbound = d.lo,
+                         high_eqbound = d.hi,
+                         alpha = 0.05,
+                         plot = F)
+
+SGPV1 <- TOST_to_SGPV(tost_res = tost_res1)
+
+```
+```{r, echo=FALSE, dpi=600, fig.width=5, fig.height=4}
+
+plot(NA, 
+     ylim = c(0, 1), 
+     xlim = c(-2, 2),
+     yaxt = "n",
+     ylab = "SGPV or TOST p-value",
+     xlab = "Mean Difference")
+axis(1, at = c(-3,-2,-1,0,1,2,3,4,5), las = 1)
+abline(v = tost_res1$high_eqbound, 
+       lty = 2)
+abline(v = tost_res1$low_eqbound, 
+       lty = 2)
+abline(v = 0, 
+       lty = 2, 
+       col = "grey")
+
+points(x = tost_res1$diff, 
+       y = 0.5, 
+       pch = 15, 
+       cex = 2)
+segments(tost_res1$LL_CI_TTEST, 
+         0.5, 
+         tost_res1$UL_CI_TTEST, 
+         0.5, 
+         lwd = 3)
+```
+*Figure 1*: Example of a 95% CI that overlaps with the lower and upper equivalence bound (indicated by the vertical dotted lines).
+
+
+Blume et al. (2018) sent through code that simulates 1000 tests with 6, 10, or 20 subjects, where means are normally distributed with a mean of 0 and a sd of 1, the equivalence range is set from -0.375 to 0.375, and a one-sample t-test is performed against 0. The figure below shows the relationship between the SGPV and the p-value from the TOST procedure. 
+```{r, include=FALSE}
+#Code by Jeffrey Blume to illustrate where TOST_p and SGPV do not give the same result.
+#Note I removed the code "na.constant=1e-5, length.warn=TRUE" from the function because this does not match the code on GitHub and I did not have the same function as used by Jeffrey - but the adjusted code reproduces his result. 
+#The code is slow because of verbose output.
+
+n=40
+breaks=c(6,10,20)
+sims=1000
+d.lo=-0.5*0.75
+d.hi=0.5*0.75
+
+keep=matrix(-99,nrow=sims,ncol=6)
+
+for (i in 1:sims) {
+  
+  z=rnorm(n,mean=0,sd=1)
+  
+  to.stat.1=TOSTone.raw(m=mean(z[1:breaks[1]]), 
+                        mu=0,
+                        sd=sd(z[1:breaks[1]]),
+                        n=length(z[1:breaks[1]]),
+                        low_eqbound=d.lo, 
+                        high_eqbound=d.hi,
+                        alpha=0.05,
+                        plot="FALSE")
+  
+  to.stat.2=TOSTone.raw(m=mean(z[1:breaks[2]]),
+                        mu=0,
+                        sd=sd(z[1:breaks[2]]),
+                        n=length(z[1:breaks[2]]),
+                        low_eqbound=d.lo,
+                        high_eqbound=d.hi,
+                        alpha=0.05,
+                        plot="FALSE")
+  
+  to.stat.3=TOSTone.raw(m=mean(z[1:breaks[3]]), 
+                        mu=0,
+                        sd=sd(z[1:breaks[3]]),
+                        n=length(z[1:breaks[3]]),
+                        low_eqbound=d.lo, 
+                        high_eqbound=d.hi,
+                        alpha=0.05,
+                        plot="FALSE")
+  
+  p.tost.1=max(to.stat.1$TOST_p1,to.stat.1$TOST_p2)
+  p.tost.2=max(to.stat.2$TOST_p1,to.stat.2$TOST_p2)
+  p.tost.3=max(to.stat.3$TOST_p1,to.stat.3$TOST_p2)
+  
+  tt.stat.1=t.test(z[1:breaks[1]])$conf.int
+  tt.stat.2=t.test(z[1:breaks[2]])$conf.int
+  tt.stat.3=t.test(z[1:breaks[3]])$conf.int
+  
+  p.delta.1=sgpv(est.lo=tt.stat.1[1], est.hi=tt.stat.1[2], 
+                 null.lo=d.lo, null.hi=d.hi)
+  
+  p.delta.2=sgpv(est.lo=tt.stat.2[1], est.hi=tt.stat.2[2], 
+                 null.lo=d.lo, null.hi=d.hi)
+  
+  p.delta.3=sgpv(est.lo=tt.stat.3[1], est.hi=tt.stat.3[2], 
+                 null.lo=d.lo, null.hi=d.hi)
+  
+  keep[i,]=cbind(p.delta.1,p.tost.1,p.delta.2,p.tost.2,p.delta.3,p.tost.3)
+}
+
+```
+
+```{r, echo=FALSE, dpi=300, fig.width=7, fig.height=5}
+plot(keep[,1],keep[,2],xlim=c(0,1),ylim=c(0,1),type="n",
+     xlab="SGPV",ylab="TOST PV")
+
+abline(1,-1,lty=2,col="grey")
+
+points(keep[,1],keep[,2],pch=20,col="dodgerblue")
+points(keep[,3],keep[,4],pch=20,col="forestgreen")
+points(keep[,5],keep[,6],pch=20,col="firebrick")
+
+legend("topright",bty="n",pch=20,
+       col=c("dodgerblue","forestgreen","firebrick"),
+       c(paste("n = ",breaks[1],sep=""),
+         paste("n = ",breaks[2],sep=""),
+         paste("n = ",breaks[3],sep="")))
+
+```
+*Figure 2*: Result of simulation showing when p-values from TOST differ from the SGPV.
+
+To understand Figure 2 better, it makes sense to re-run the simulation with slightly larger sample size to distinguish two factors that contribute to the observed pattern, and to better understand the relationship between p-values from the TOST procedure and the SGPV whenever the ratio of the confidence interval width to the equivalence range exceeds 2:1. 
+
+```{r, include=FALSE}
+#Adapted code.
+n=1000
+sd <- 10
+breaks=c(100,500,1000)
+sims=1000
+d.lo=-0.5*0.75
+d.hi=0.5*0.75
+
+keep=matrix(-99,nrow=sims,ncol=6)
+
+for (i in 1:sims) {
+  
+  z=rnorm(n,mean=0,sd=sd)
+  
+  to.stat.1=TOSTone.raw(m=mean(z[1:breaks[1]]), mu=0, 
+                        sd=sd(z[1:breaks[1]]), n=length(z[1:breaks[1]]), 
+                        low_eqbound=d.lo, high_eqbound=d.hi, alpha=0.05,plot=F)
+  
+  to.stat.2=TOSTone.raw(m=mean(z[1:breaks[2]]), mu=0, 
+                        sd=sd(z[1:breaks[2]]), n=length(z[1:breaks[2]]), 
+                        low_eqbound=d.lo, high_eqbound=d.hi, alpha=0.05,plot=F)
+  
+  to.stat.3=TOSTone.raw(m=mean(z[1:breaks[3]]), mu=0, 
+                        sd=sd(z[1:breaks[3]]), n=length(z[1:breaks[3]]), 
+                        low_eqbound=d.lo, high_eqbound=d.hi, alpha=0.05,plot=F)
+  
+  p.tost.1=max(to.stat.1$TOST_p1,to.stat.1$TOST_p2)
+  p.tost.2=max(to.stat.2$TOST_p1,to.stat.2$TOST_p2)
+  p.tost.3=max(to.stat.3$TOST_p1,to.stat.3$TOST_p2)
+  
+  tt.stat.1=t.test(z[1:breaks[1]])$conf.int
+  tt.stat.2=t.test(z[1:breaks[2]])$conf.int
+  tt.stat.3=t.test(z[1:breaks[3]])$conf.int
+  
+  p.delta.1=sgpv(est.lo=tt.stat.1[1], est.hi=tt.stat.1[2], 
+                 null.lo=d.lo, null.hi=d.hi)
+  
+  p.delta.2=sgpv(est.lo=tt.stat.2[1], est.hi=tt.stat.2[2], 
+                 null.lo=d.lo, null.hi=d.hi)
+  
+  p.delta.3=sgpv(est.lo=tt.stat.3[1], est.hi=tt.stat.3[2], 
+                 null.lo=d.lo, null.hi=d.hi)
+  
+  keep[i,]=cbind(p.delta.1,p.tost.1,p.delta.2,p.tost.2,p.delta.3,p.tost.3)
+}
+
+```
+
+```{r, echo=FALSE, dpi=300, fig.width=7, fig.height=5}
+plot(keep[,1],keep[,2],xlim=c(0,1),ylim=c(0,1),type="n",
+     xlab="SGPV",ylab="TOST PV")
+
+abline(1,-1,lty=2,col="grey")
+
+points(keep[,1],keep[,2],pch=20,col="dodgerblue")
+points(keep[,3],keep[,4],pch=20,col="forestgreen")
+points(keep[,5],keep[,6],pch=20,col="firebrick")
+
+legend("topright",bty="n",pch=20,
+       col=c("dodgerblue","forestgreen","firebrick"),
+       c(paste("n = ",breaks[1],sep=""),
+         paste("n = ",breaks[2],sep=""),
+         paste("n = ",breaks[3],sep="")))
+
+```
+*Figure 3*: Reproduced Figure 2, but with larger sample sizes and larger standard deviation.
+```{r, include = FALSE}
+#Check if power is indeed 0 for equivalence tests
+sum(p.tost.1<0.05)
+sum(p.tost.2<0.05)
+sum(p.tost.3<0.05)
+```
+First of all, it should be noted that in this simulation the *p*-values for the TOST procedure have a lower bound, and the p-values for the equivalence test are not smaller than 0.05 for sample sizes of 100, 500, and 1000 per group (i.e., they do not get below 0.05 on the y-axis). In other words, we can *never* conclude equivalence based on any of the 1000 studies we simulated. How is this possible? Remember that the TOST procedure consists of two one-sided tests against the upper and lower equivalence bound. The TOST p-value is smaller than 0.05 if the 90% CI falls completely between the upper and lower equivalence bounds. However, we are simulating data where the 90% CI is so wide it never falls completely within the two equivalence bounds. As Lakens (2017) notes: “in small samples (where CIs are wide), a study might have no statistical power (i.e., the CI will always be so wide that it is necessarily wider than the equivalence bounds).” This is the situation in the simulation. None of the *p*-values based on the TOST procedure are below 0.05, and thus, in the long run we have 0% power. 
+
+For the SGPV we know that it is set to 0.5 whenever the CI is twice as wide as the equivalence range, and the CI overlaps with the upper and lower equivalence bound. When we start at the left end of the x-axis we see that the SGPV can be 0 (i.e., fall completely outside of the equivalence range). The SGPV becomes smaller as the 95% CI starts to overlap with one of the equivaence bounds. However, where the SGPV would be 0.5 only when the observed mean falls exactly on one of the equivalence bounds, it now is set to 0.5 earlier. The wide 95% CI implies that well before the observed mean has moved close enough to fall on the equivalence bound, the confidence interval overlaps with both of the equivalence bounds (see Figure 1). We see this in Figure 3, where the SGVP increases up until the point where the CI overlaps with the upper and lower equivalence bounds - at which point the SGPV is set to 0.5. The smaller the CI (or the larger the sample size, all else equal) the smaller the TOST *p*-value is before the SGPV is set to 0.5.
+
+Now that we have explained on pattern that leads to the variation in the plot by Jeffrey Blume, we need to turn to the second source of variation. First, we slightly adapt the original code by making the equivalence bound wider (from -1 to 1), adding a constant to the simulated data (from -2 to 2) to simulate data when there is a true effect (this is such that we have data for the entire range of SGPV and TOT p-values), and setting sample sizes to 10, 20 and 40. We see a regular curve as we have seen before. 
+
+
+```{r, include=FALSE}
+#
+n=40
+breaks=c(10,20,40)
+sims=1000
+d.lo=-1
+d.hi=1
+
+keep=matrix(-99,nrow=sims,ncol=6)
+
+for (i in 1:sims) {
+  
+  z=rnorm(n,mean=0,sd=1)+runif(1,-2,2)
+  
+  to.stat.1=TOSTone.raw(m=mean(z[1:breaks[1]]), 
+                        mu=0,
+                        sd=sd(z[1:breaks[1]]),
+                        n=length(z[1:breaks[1]]),
+                        low_eqbound=d.lo, 
+                        high_eqbound=d.hi,
+                        alpha=0.05,
+                        plot="FALSE")
+  
+  to.stat.2=TOSTone.raw(m=mean(z[1:breaks[2]]),
+                        mu=0,
+                        sd=sd(z[1:breaks[2]]),
+                        n=length(z[1:breaks[2]]),
+                        low_eqbound=d.lo,
+                        high_eqbound=d.hi,
+                        alpha=0.05,
+                        plot="FALSE")
+  
+  to.stat.3=TOSTone.raw(m=mean(z[1:breaks[3]]), 
+                        mu=0,
+                        sd=sd(z[1:breaks[3]]),
+                        n=length(z[1:breaks[3]]),
+                        low_eqbound=d.lo, 
+                        high_eqbound=d.hi,
+                        alpha=0.05,
+                        plot="FALSE")
+  
+  p.tost.1=max(to.stat.1$TOST_p1,to.stat.1$TOST_p2)
+  p.tost.2=max(to.stat.2$TOST_p1,to.stat.2$TOST_p2)
+  p.tost.3=max(to.stat.3$TOST_p1,to.stat.3$TOST_p2)
+  
+  tt.stat.1=t.test(z[1:breaks[1]])$conf.int
+  tt.stat.2=t.test(z[1:breaks[2]])$conf.int
+  tt.stat.3=t.test(z[1:breaks[3]])$conf.int
+  
+  p.delta.1=sgpv(est.lo=tt.stat.1[1], est.hi=tt.stat.1[2], 
+                 null.lo=d.lo, null.hi=d.hi)
+  
+  p.delta.2=sgpv(est.lo=tt.stat.2[1], est.hi=tt.stat.2[2], 
+                 null.lo=d.lo, null.hi=d.hi)
+  
+  p.delta.3=sgpv(est.lo=tt.stat.3[1], est.hi=tt.stat.3[2], 
+                 null.lo=d.lo, null.hi=d.hi)
+  
+  keep[i,]=cbind(p.delta.1,p.tost.1,p.delta.2,p.tost.2,p.delta.3,p.tost.3)
+}
+
+```
+```{r, echo=FALSE, dpi=300, fig.width=7, fig.height=5}
+plot(keep[,1],keep[,2],xlim=c(0,1),ylim=c(0,1),type="n",
+     xlab="SGPV",ylab="TOST PV")
+
+abline(1,-1,lty=2,col="grey")
+
+points(keep[,1],keep[,2],pch=20,col="dodgerblue")
+points(keep[,3],keep[,4],pch=20,col="forestgreen")
+points(keep[,5],keep[,6],pch=20,col="firebrick")
+
+legend("topright",bty="n",pch=20,
+       col=c("dodgerblue","forestgreen","firebrick"),
+       c(paste("n = ",breaks[1],sep=""),
+         paste("n = ",breaks[2],sep=""),
+         paste("n = ",breaks[3],sep="")))
+
+```
+We then repeat the simulation, now setting the equivalence bounds to a more narrow -0.4 to 0.4 range. Everything else is identical to the plot above. 
+```{r, include=FALSE}
+#
+n=40
+breaks=c(10,20,40)
+sims=1000
+d.lo=-0.4
+d.hi=0.4
+
+keep=matrix(-99,nrow=sims,ncol=6)
+
+for (i in 1:sims) {
+  
+  z=rnorm(n,mean=0,sd=1)+runif(1,-2,2)
+  
+  to.stat.1=TOSTone.raw(m=mean(z[1:breaks[1]]), 
+                        mu=0,
+                        sd=sd(z[1:breaks[1]]),
+                        n=length(z[1:breaks[1]]),
+                        low_eqbound=d.lo, 
+                        high_eqbound=d.hi,
+                        alpha=0.05,
+                        plot="FALSE")
+  
+  to.stat.2=TOSTone.raw(m=mean(z[1:breaks[2]]),
+                        mu=0,
+                        sd=sd(z[1:breaks[2]]),
+                        n=length(z[1:breaks[2]]),
+                        low_eqbound=d.lo,
+                        high_eqbound=d.hi,
+                        alpha=0.05,
+                        plot="FALSE")
+  
+  to.stat.3=TOSTone.raw(m=mean(z[1:breaks[3]]), 
+                        mu=0,
+                        sd=sd(z[1:breaks[3]]),
+                        n=length(z[1:breaks[3]]),
+                        low_eqbound=d.lo, 
+                        high_eqbound=d.hi,
+                        alpha=0.05,
+                        plot="FALSE")
+  
+  p.tost.1=max(to.stat.1$TOST_p1,to.stat.1$TOST_p2)
+  p.tost.2=max(to.stat.2$TOST_p1,to.stat.2$TOST_p2)
+  p.tost.3=max(to.stat.3$TOST_p1,to.stat.3$TOST_p2)
+  
+  tt.stat.1=t.test(z[1:breaks[1]])$conf.int
+  tt.stat.2=t.test(z[1:breaks[2]])$conf.int
+  tt.stat.3=t.test(z[1:breaks[3]])$conf.int
+  
+  p.delta.1=sgpv(est.lo=tt.stat.1[1], est.hi=tt.stat.1[2], 
+                 null.lo=d.lo, null.hi=d.hi)
+  
+  p.delta.2=sgpv(est.lo=tt.stat.2[1], est.hi=tt.stat.2[2], 
+                 null.lo=d.lo, null.hi=d.hi)
+  
+  p.delta.3=sgpv(est.lo=tt.stat.3[1], est.hi=tt.stat.3[2], 
+                 null.lo=d.lo, null.hi=d.hi)
+  
+  keep[i,]=cbind(p.delta.1,p.tost.1,p.delta.2,p.tost.2,p.delta.3,p.tost.3)
+}
+
+```
+```{r, echo=FALSE, dpi=300, fig.width=7, fig.height=5}
+plot(keep[,1],keep[,2],xlim=c(0,1),ylim=c(0,1),type="n",
+     xlab="SGPV",ylab="TOST PV")
+
+abline(1,-1,lty=2,col="grey")
+
+points(keep[,1],keep[,2],pch=20,col="dodgerblue")
+points(keep[,3],keep[,4],pch=20,col="forestgreen")
+points(keep[,5],keep[,6],pch=20,col="firebrick")
+
+legend("topright",bty="n",pch=20,
+       col=c("dodgerblue","forestgreen","firebrick"),
+       c(paste("n = ",breaks[1],sep=""),
+         paste("n = ",breaks[2],sep=""),
+         paste("n = ",breaks[3],sep="")))
+
+```
