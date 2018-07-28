@@ -73,7 +73,7 @@ The SGPV has strong similarities with an already existing approach known as equi
 
 Surprisingly, Blume et al (2018) do not discuss equivalence testing in their article, despite the strong conceptual similarities. Here, we aim to examine the similarities and differences between equivalence testing using the TOST procedure and the SGPV. Our goal is to allow researchers to choose the statistic that best answers the question they are interested in.
 
-#The relationship between *p*values from TOST and SGPV
+#The relationship between *p*-values from TOST and SGPV
 
 In the plot below *p*-values are calculated for the TOST equivalence testing procedure where a true population mean ranging from 140 to 150 is compared to the test value of 145 in a one-sample equivalence test where equivalence bounds are set to difference of -2 and +2 around the test value of 145. In other words, the equivalence range in the test contains all means between 143 and 147. Blume et al (2018) rely on the z-distribution, while to TOST package uses the *t*-distribution (which is more accurate at smaller sample sizes). To make sure the SGPV give basically identical results, sample sizes consist of 1000000 observations (for which the *t*-distribution and z-distribution are basically identical). The population standard deviation is set to 500 to still give some variation in responses. Our conclusions should hold to the same extend for more realistic numbers (e.g., N = 100, SD = 1). 
 
@@ -585,7 +585,7 @@ plot(sgpv_list,
      ylab = "TOST p-value",
      xlab = "SGPV")
 ```
-*Figure 5*: The relationship between *p*values from the TOST procedure and the SGPV for the same scenario as in Figure 1.
+*Figure 5*: The relationship between *p*-values from the TOST procedure and the SGPV for the same scenario as in Figure 1.
 
 A third situation in which the SGPV deviates strongly from the TOST *p*-value is whenever the CI is more than twice as wide as the equivalence range, and the CI overlaps with the upper *and* lower equivalence bound. In this situation the normal calculation of the proportion of overlap is skipped, and the SGPV is set to 0.5 instead. Blume et al. (2018) call this the 'small sample correction factor'. However, it is not a correction in the typical sense of the word, since the SGPV is not adjusted to any 'correct' value. When the normal calculation would be 'misleading' (i.e., the SGPV would be small, which normally would suggest support for the alternative hypothesis, when all values in the equivalence range are also supported), the SGPV is set to 0.5 which according to Blume and colleagues signal the SGPV is 'uninformative'. Note that the CI can be twice as wide as the equivalence range whenever the sample size is small (and the confidence interval width is large) *or* when then equivalence range is narrow. It is therefore not so much a 'small sample correction' as it is an exception to the typical calculation of the SGPV whenever the ratio of the confidence interval width to the equivalence range exceeds 2:1 and the CI overlaps with the upper and lower bounds. 
 
@@ -659,7 +659,7 @@ plot(sgpv_list,
      ylab = "TOST p-value",
      xlab = "SGPV")
 ```
-*Figure 7*: The relationship between *p*values from the TOST procedure and the SGPV for the same scenario as in Figure 6.
+*Figure 7*: The relationship between *p*-values from the TOST procedure and the SGPV for the same scenario as in Figure 6.
 
 There is one last situation where the *p*-value from the TOST procedure and the SGPV are unrelated. This is when the CI overlaps with the upper and lower equivalence bound, but the CI is *not* twice as wide as the equivalence range. This fourth category exists because of the decision by Blume and collagues to set the SGPV to 0.5 whenever the CI is twice as wide as the equivalence range and the CI overlaps with both equivalence bounds. This means that there are situations where the CI interval overlaps with both equivalence bounds, while the CI is less than twice as large as the equivalence bound. For example, in the example below, we see an example where the CI is only 1.79 times as wide as the equivalence bounds, but the CI overlaps with the lower and upper equivalence bounds.
 ```{r, include=FALSE}
@@ -712,7 +712,7 @@ segments(tost_res1$LL_CI_TTEST,
 ```
 *Figure 8*: Example of a 95% CI that overlaps with the lower and upper equivalence bound (indicated by the vertical dotted lines).
 
-If the observed mean would be somewhat closer to 0, or further away from 0, the SGPV would remain constant (the CI width does not change, it ccompletely overlaps with the equivalence range) while the *p*-value for the TOST procedure varies. We can see this in Figure 9 below. The SGPV is not set to 0.5, but is slightly higher than 0.5 across a range of means. How high the SGPV will be when the CI overlaps with the lower and upper equivalence bounds, but the CI is not twice as large as the equivalence range, depends on the width of the CI and the equivalence range. 
+If the observed mean would be somewhat closer to 0, or further away from 0, the SGPV would remain constant (the CI width does not change, it completely overlaps with the equivalence range) while the *p*-value for the TOST procedure varies. We can see this in Figure 9 below. The SGPV is not set to 0.5, but is slightly higher than 0.5 across a range of means. How high the SGPV will be when the CI overlaps with the lower and upper equivalence bounds, but the CI is not twice as large as the equivalence range, depends on the width of the CI and the equivalence range. 
 ```{r, include=FALSE}
 step = 0.01
 
@@ -781,9 +781,9 @@ plot(sgpv_list,
      ylab = "TOST p-value",
      xlab = "SGPV")
 ```
-*Figure 10*: The relationship between *p*values from the TOST procedure and the SGPV for the same scenario as in Figure 6.
+*Figure 10*: The relationship between *p*-values from the TOST procedure and the SGPV for the same scenario as in Figure 6.
 
-To conclude this section, there are four situations where the *p*-value from the TOST procedure is unrelated to the SGPV, In all these situation the *p*-value for the equivalence test differentiates tests with different means, but the SGPV does not. Therefore, as a purely descriptive statistic, the SGPV is more limited than the *p*value from the TOST procedure. The proportion of overlap can be the same value when the observed mean is 0 or when the observed mean falls just inside the equivalence bound, and additional information (e.g., the 95% CI) is required to differentiate these situations. One way to mitigate this limitation of the SGPV would be to set the SGPV to 0.5 whenever the CI overlaps with both the upper and lower equivalence bound (irrespective of the width of the CI). 
+To conclude this section, there are four situations where the *p*-value from the TOST procedure is unrelated to the SGPV, In all these situation the *p*-value for the equivalence test differentiates tests with different means, but the SGPV does not. Therefore, as a purely descriptive statistic, the SGPV is more limited than the *p*-value from the TOST procedure. The proportion of overlap can be the same value when the observed mean is 0 or when the observed mean falls just inside the equivalence bound, and additional information (e.g., the 95% CI) is required to differentiate these situations. One way to mitigate this limitation of the SGPV would be to set the SGPV to 0.5 whenever the CI overlaps with both the upper and lower equivalence bound (irrespective of the width of the CI). 
 
 ##What are the Relative Strengths and Weaknesses of Equivalence Testing and SGPV?
 
@@ -795,7 +795,7 @@ The SGPV is 1 for tests where *p*-values for the TOST procedure differ. For exam
 
 #Discussion
 
-It seems Blume et al (2018) where not aware of the existence of equivalence tests, and we believe that our explanation of the similarities between the TOST procedure and the SGPV provides some useful context to interpret the contribution of second generation *p*values to the statistical toolbox. The novelty lies in its use as a descriptive statistic. The added benefit of calculating the proportion of overlap of a 95% CI with the equivalence range, and using this percentage to describe the data, remains somewhat unclear for practical puroposes. Nevertheless, our only goal is to clarify the relationship between a newly proposed statistic and the already existing TOST approach used to test for equivalence, and let researchers make an informed decision about which statistical approach provides the best answer to their question.
+It seems Blume et al (2018) where not aware of the existence of equivalence tests, and we believe that our explanation of the similarities between the TOST procedure and the SGPV provides some useful context to interpret the contribution of second generation *p*-values to the statistical toolbox. The novelty lies in its use as a descriptive statistic. The added benefit of calculating the proportion of overlap of a 95% CI with the equivalence range, and using this percentage to describe the data, remains somewhat unclear for practical puroposes. Nevertheless, our only goal is to clarify the relationship between a newly proposed statistic and the already existing TOST approach used to test for equivalence, and let researchers make an informed decision about which statistical approach provides the best answer to their question.
 
 #References
 
