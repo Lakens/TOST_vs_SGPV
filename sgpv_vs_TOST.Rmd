@@ -1,7 +1,7 @@
 ---
 title: "Equivalence Testing and the Second Generation P-Value"
 author: "Daniël Lakens & Marie Delacre"
-date: "28 juli 2018"
+date: "15 august 2018"
 output: github_document
 ---
 
@@ -51,15 +51,16 @@ for(i in seq(140, 150, step)){
   high_eqbound = 2 
   alpha = 0.05
    
-  invisible(capture.output(res <- TOSTone.raw(m = m, 
-                                              mu = mu,
-                                              sd = sd, 
-                                              n = n, 
-                                              low_eqbound = low_eqbound, 
-                                              high_eqbound = high_eqbound, 
-                                              alpha = alpha,
-                                              plot = FALSE
-  )))
+  res <- TOSTone.raw(m = m, 
+                     mu = mu,
+                     sd = sd, 
+                     n = n, 
+                     low_eqbound = low_eqbound, 
+                     high_eqbound = high_eqbound, 
+                     alpha = alpha,
+                     plot = FALSE,
+                     verbose = FALSE
+  )
   t <- (m - mu)/(sd/sqrt(n))
   t_list[count] <- t
   sgpv_list[count] <- p_delta(mu+res$LL_CI_TTEST, mu+res$UL_CI_TTEST, mu+low_eqbound, mu+high_eqbound)
@@ -67,7 +68,7 @@ for(i in seq(140, 150, step)){
   p_list[count] <- 2 * pt(-abs(t), df = n-1)
 }
 ```
-```{r sgpv_tost, echo=FALSE, dpi=600, fig.width=6, fig.height=5}
+```{r, echo=FALSE, dpi=600, fig.width=6, fig.height=5}
 plot(NA, 
      ylim = c(0, 1), 
      xlim = c(0, 1001),
@@ -78,8 +79,9 @@ plot(NA,
 axis(1, at = seq(0,1000,100), labels = seq(140,150,1), las = 1)
 axis(2, at = seq(0,1,0.1), labels = seq(0,1,0.1), las = 1)
   
-lines(sgpv_list, type="l", col = "darkgrey", lwd = 3, lty = 3)
+lines(sgpv_list, type="l", col = "darkgrey", lwd = 3, lty = 1)
 lines(p_tost_list, lwd = 3)
+abline(h = c(0.975, 0.5, 0.025), col = "grey", lwd = 1, lty = 3)
 ```
 *Figure 1*: Comparison of *p*-values from TOST (black line) and SGPV (dotted grey line) across a range of true population means (x-axis) tested against a mean of 145 in a one-sample *t*-test with a sample size of 1000000 and a standard deviation of 500. 
 
@@ -95,8 +97,10 @@ plot(NA,
 axis(1, at = seq(0,1000,100), labels = seq(140,150,1), las = 1)
 axis(2, at = seq(0,1,0.1), labels = seq(0,1,0.1), las = 1)
   
-lines(1-sgpv_list, type="l", col = "darkgrey", lwd = 3, lty = 3)
+lines(1-sgpv_list, type="l", col = "darkgrey", lwd = 3, lty = 1)
 lines(p_tost_list, lwd = 3)
+abline(h = c(0.975, 0.5, 0.025), col = "grey", lwd = 1, lty = 3)
+
 ```
 ```{r, include=FALSE}
 m <- 145
@@ -564,15 +568,16 @@ for(i in seq(-3, 3, step)){
   high_eqbound = 0.4
   alpha = 0.05
    
-  invisible(capture.output(res <- TOSTone.raw(m = m, 
-                                              mu = mu,
-                                              sd = sd, 
-                                              n = n, 
-                                              low_eqbound = low_eqbound, 
-                                              high_eqbound = high_eqbound, 
-                                              alpha = alpha,
-                                              plot = FALSE
-  )))
+  res <- TOSTone.raw(m = m, 
+                     mu = mu,
+                     sd = sd, 
+                     n = n, 
+                     low_eqbound = low_eqbound, 
+                     high_eqbound = high_eqbound, 
+                     alpha = alpha,
+                     plot = FALSE,
+                     verbose = FALSE
+  )
   t <- (m - mu)/(sd/sqrt(n))
   t_list[count] <- t
   sgpv_list[count] <- p_delta(mu+res$LL_CI_TTEST, mu+res$UL_CI_TTEST, mu+low_eqbound, mu+high_eqbound)
@@ -739,13 +744,200 @@ plot(sgpv_list,
 
 To conclude this section, there are four situations where the *p*-value from the TOST procedure is unrelated to the SGPV. In all these situations the *p*-value for the equivalence test differentiates tests with different means, but the SGPV does not. Therefore, as a purely descriptive statistic, the SGPV is more limited than the value from the TOST procedure. The proportion of overlap can be the same value when the observed mean is 0 or when the observed mean falls just inside the equivalence bound, and additional information (e.g., the 95% CI) is required to differentiate these situations. One way to mitigate this limitation of the SGPV would be to set the SGPV to 0.5 whenever the CI overlaps with both the upper and lower equivalence bound (irrespective of the width of the CI). 
 
+##The relation between equivalence tests and SGPV when confidence intervals are no symmetrical
+
+So far we have only looked at the relation between equivalence tests and the SGPV when confidence intervals are symmetric (e.g., for confidence intervals around mean differences). For correlations, which are bound between -1 and 1, confidence intervals are only symmetric for a correlation of exactly 0. The confidence interval becomes increasingly asymmetric as the observed correlation nears -1 or 1. For example, with ten observations, an observed correlation of 0 has a symmetric 95% confidence interval ranging from -0.629 to 0.629, while and observed correlation of 0.7 has an asymmetric 95% confidence interval ranging from 0.126 to 0.992.
+
+The effect of assymetric confidence intervals is most easily noticable at smaller sample sizes, therefore in Figure 11 below we plot the p-values from equivalence tests and the SGPV (again plotted as 1-SGPV for ease of comparison) for correlations. The sample size is 30 pairs of observations, and the lower and upper equivalence bounds are set to -0.45 and 0.45, with an alpha of 0.05. As the observed correlation in the sample moves from 1 to 0 the *p*-value from the equivalence test becomes smaller, as does 1-SGPV. The pattern is quite similar to that in Figure 2. The p-value for the TOST procedure and 1-SGPV are still identical when *p*-values are 0.975 and 0.025 (indicated by the upper and lower horizontal dotted lines). There are two important differences, however. First of all, the SGPV is no longer a straight line, but a curve, due to the asymmetry in the 95% CI. Second, and most importantly, the p-value for the equivalence test and the SGPV do no longer overlap at *p* = 0.5. 
+```{r, include=FALSE}
+n <- 30
+r_pop <- .0
+low_eqbound_r <- -.45
+high_eqbound_r <- .45
+alpha <- .05
+step <- 0.001
+
+
+p_tost_list <- numeric(length(seq(-0.99, 0.99, step)))
+sgpv_list <- numeric(length(seq(-0.99, 0.99, step)))
+p_list <- numeric(length(seq(-0.99, 0.99, step)))
+t_list <- numeric(length(seq(-0.99, 0.99, step)))
+lowbound_list <- numeric(length(seq(-0.99, 0.99, step)))
+highbound_list <- numeric(length(seq(-0.99, 0.99, step)))
+
+count <- 0
+
+for(i in seq(-0.99, 0.99, step)){
+  count <- count + 1
+  r <- i
+
+  res<-TOSTr(n = n,
+             r = r,
+             low_eqbound_r = low_eqbound_r,
+             high_eqbound_r = high_eqbound_r,
+             alpha = alpha,
+             plot = FALSE,
+             verbose = FALSE)
+
+  t_list[count]=r*sqrt(n-2)/sqrt(1-r^2)
+  p_list[count]=2*(1-pt(abs(t_list[count]),df=n-2))
+  sgpv_list[count] <- p_delta(res$LL_CI_TTEST,res$UL_CI_TTEST, low_eqbound_r, high_eqbound_r)
+  p_tost_list[count] <- max(res$TOST_p1, res$TOST_p2)
+  lowbound_list[count]=res$LL_CI_TTEST
+  highbound_list[count]=res$UL_CI_TTEST
+} 
+```
+```{r, echo=FALSE, dpi=600, fig.width=6, fig.height=5}
+par(xpd=F)
+plot(NA, 
+     ylim = c(0, 1), 
+     xlim = c(0, length(seq(-0.99, 0.99, step))),
+     yaxt = "n",
+     xaxt = "n",
+     ylab = "TOST p-value and SGPV",
+     xlab = "Correlation")
+axis(1, at = seq(0,1981,1981/20), labels = seq(-1,1,0.1), las = 1)
+axis(2, at = seq(0,1,0.1), labels = seq(0,1,0.1), las = 1)
+  
+lines(1-sgpv_list, type="l", col = "darkgrey", lwd = 3, lty = 3)
+lines(p_tost_list, lwd = 3)
+abline(h = c(0.975, 0.5, 0.025),
+       lty = 2,
+       col = "grey")
+
+```
+*Figure 11*: Comparison of *p*-values from TOST (black line) and 1-SGPV (dotted grey curve) across a range of observed sample correlations (x-axis) tested against equivalence bounds of r = -0.45 and r = 0.45 with n = 30 and an alpha of 0.05. 
+```{r, include=FALSE}
+low_eqbound_r = -0.45
+high_eqbound_r = 0.45
+res<-TOSTr(n = 30,
+           r = 0.45,
+           low_eqbound_r = -0.45,
+           high_eqbound_r = 0.45,
+           alpha = .05,
+           plot = FALSE,
+           verbose = FALSE)
+sgpv <- p_delta(res$LL_CI_TTEST,res$UL_CI_TTEST, low_eqbound_r, high_eqbound_r)
+```
+The reason that the equivalence test and SGPV no longer overlap is also because of asymmetric confidence intervals. If the observed correlation falls exactly on the equivalence bound the *p*-value for the equivalence test indicates that the probability of observing the observed or more extreme data, assuming the equivalence bound is the true effect size, is 50%. In other words, if the true effect size is the same as the equivalence bound, it is equally likely to find an effect more extreme than the equivalence bound, as it is to observe an effect that is less extreme than the equivalence bound. However, as can be seen in Figure 12, the two second generation *p*-values associated with the observed correlations at r = -0.45 and r = 0.45 are `r round(sgpv,3)`. Because the confidence intervals are asymmetric around the observed effect size of 0.45 (ranging from `r round(res$LL_CI_TTEST,2)` to `r round(res$UL_CI_TTEST,2)`) according to Blume et al. (2018) `r round(sgpv,3)*100`% of the data-supported hypotheses are null hypotheses, and therefore `r round(sgpv,3)*100`% of the data-supported hypotheses are compatible with the null premise. 
+```{r, echo=FALSE, dpi=600, fig.width=6, fig.height=5}
+n=30
+low_eqbound_r=-.45
+high_eqbound_r=.45
+r1=-.45
+r2=0
+r3=.45
+
+res1<-TOSTr(n=n,r=r1,low_eqbound_r=low_eqbound_r,high_eqbound_r=high_eqbound_r,alpha=alpha,plot=FALSE, verbose = FALSE)
+res2<-TOSTr(n=n,r=r2,low_eqbound_r=low_eqbound_r,high_eqbound_r=high_eqbound_r,alpha=alpha,plot=FALSE, verbose = FALSE)
+res3<-TOSTr(n=n,r=r3,low_eqbound_r=low_eqbound_r,high_eqbound_r=high_eqbound_r,alpha=alpha,plot=FALSE, verbose = FALSE)
+
+LL95_r1=res1$LL_CI_TTEST
+UL95_r1=res1$UL_CI_TTEST
+LL95_r2=res2$LL_CI_TTEST
+UL95_r2=res2$UL_CI_TTEST
+LL95_r3=res3$LL_CI_TTEST
+UL95_r3=res3$UL_CI_TTEST
+
+par(xpd=F)
+plot(NA, ylim=c(0,.7), xlim=c(-1,1), bty="l", yaxt="n", ylab="",xlab="Correlation")
+abline(v = c(r1, r2, r3),
+       lty = 2,
+       col = "grey")
+
+points(x=r1, y=0.6, pch=15, cex=1.1)
+segments(LL95_r1,0.6,UL95_r1,0.6, lwd=2)
+points(x=r2, y=0.4, pch=15, cex=1.1)
+segments(LL95_r2,0.4,UL95_r2,0.4, lwd=2)
+points(x=r3, y=0.2, pch=15, cex=1.1)
+segments(LL95_r3,0.2,UL95_r3,0.2, lwd=2)
+```
+*Figure 12*: Three 95% confidence intervals for observed effect sizes of r = -0.45, r = 0, and r = 0.45 for n = 30. Only the confidence interval for r = 0 is symmetric.  
+```{r, include=FALSE}
+#Example illustrating the most extreme case. 
+low_eqbound_r = -0.99
+high_eqbound_r = 0.99
+
+res<-TOSTr(n = 4,
+           r = 0.99,
+           low_eqbound_r = low_eqbound_r,
+           high_eqbound_r = high_eqbound_r,
+           alpha = .05,
+           plot = TRUE,
+           verbose = TRUE)
+sgpv <- p_delta(res$LL_CI_TTEST,res$UL_CI_TTEST, low_eqbound_r, high_eqbound_r)
+sgpv
+```
+
+This example illustrates the difference between a proportion and a probability. There is always a 50% probability of observing a correlation smaller or larger than the true correlation, but the SGPV for this situation depends on how far away the observed correlation is from 0. The further away from 0, the larger the SGPV when the observed mean falls on the equivalence bound. The SGPV is the proportion of values in a 95% confidence interval that overlap with the equivalence range, but not the probability that these values will be observed. In the most extreme case (i.e., a sample size of 4, and equivalence bounds set to r = -0.99 and 0.99, with an observed correlation of 0.99) `r round(sgpv,3)*100`% of the confidence interval overlaps with the equivalence range, even though in the long run only 50% of the correlations observed in the future will fall in this range. It should be noted that in larger sample sizes the SGPV is closer to 0.5 whenever the observed correlation falls on the equivalence bound, but this extreme example nevertheless clearly illustrates the difference between two different questions the SGPV and a *p*-value are answers to. The conclusion of this in depth look at asymmetric confidence intervals is that, while a SGPV of 1 or 0 can still be interpreted the same way as a *p*-value of 0.025 and 0.975 can be interpreted in n equivalence test, since the SGPV and *p*-value for the TOST procedure are always directly related at these values. Although Blume et al (2018, p. 3) state that "the degree of overlap conveys how compatible the data are with the null premise" this definition of what the SGPV provides does not hold for asymmetric confidence intervals. Although a SGPV of 1 or 0 can be directly interpreted, a SGPV between 0 and 1 is not interpretable as 'compatibility with the null hypothesis'. When the observed correlation equals an equivalence bound, 50% of the normally distributed data is compatible with the null hypothesis (i.e., falls within the equivalence range), even when the SGPV is larger than 0.5. 
+
 ##What are the Relative Strengths and Weaknesses of Equivalence Testing and SGPV?
 
 Given the strong relationship between SGPV and equivalence testing, a logical question is to ask what the introduction of SGPV adds to the existing statistical approaches, including equivalence tests, and what the relative strengths and weaknesses of either approach are. First of all, SGPV is a descriptive statistic (unlike the *p*-value that is calculated for an equivalence test, which is an inferential statistic). It numerically summarizes the information that is visually present in a plot (such as Figure 3) displaying the equivalence range and the 95% CI around the observed effect.
 
 The SGPV is 1 for tests where *p*-values for the TOST procedure differ. For example,  different equivalence tests with *p* = 0.024 and *p* = 0.0001 have a SGPV of 1. Although a SGPV of 1 or 0 has a clear interpretation (we can reject effects outside or inside the equivalence range) intermediate values are not as easy to interpret (e.g., it is unclear how we would interpret a SGPV of 0.56 versus 0.65). Since the SGPV is always directly related to a *p*-value from the TOST procedure, different SGPV can be interpreted in the same manner as different *p*-values. From a Fisherian viewpoint, the lower the *p*-value, the worse the fit of the data with a specific model, and analogously, the lower the SGPV the worse the fit of the data with the equivalence range. From a Neyman-Pearson approach to statistics, only the dichotomous rejection of values outside of the equivalence range (TOST *p* < $\alpha$ or SGPV = 1) allows you to act as if the null-hypothesis is true while controlling our error rate at a known maximum.
 
-[To be extended]
+One weakness of the SGPV is its reliance on the 'small sample correction', where the SGPV is set to 0.5 whenever the ratio of the confidence interval width to the equivalence range exceeds 2:1 and the CI overlaps with the upper and lower bounds. This exception to the normal calculation of the SGPV is introduced to prevent misleading values. Without this correction it is possible that a confidence interval is extremely wide, and an equivalence range is extremely narrow, which without the correction would lead to a very low value for the SGPV, which as Blume et al (2018, p. 7) seems to suggest that 'the data favor alternative hypotheses', even when the data is just extremely inaccurate compared to the width of the equivalence range. Although setting the SGPV to 0.5 whenever the ratio of the confidence interval width to the equivalence range exceeds 2:1 is necessary to prevent misleading results, it leads to a range of situations where the SGPV is set to 0.5, while the *p*-value from the TOST procedure continues to differentiate (see Figure 6). 
+
+As a more extreme example of the peculiar behavior of the 'small sample correction' as currently implemented in the calculation of the SGPV see Figure 13 below. In this figure observed correlations (from a sample size of 10) from -1 to 1 are tested against against an equivalence range from r = 0.4 to r = 0.8. We can see the SGPV has a peculiar shape because it is set to 0.5 for certain observed correlations, even though there is no risk of meaningless SGPV in this range. This example suggests that the current implementation of the 'small sample correction' could be improved. 
+
+```{r, include=FALSE}
+n <- 10
+r_pop <- 0.6
+low_eqbound_r <- 0.4
+high_eqbound_r <- 0.8
+alpha <- .05
+step <- 0.001
+
+
+p_tost_list <- numeric(length(seq(-0.99, 0.99, step)))
+sgpv_list <- numeric(length(seq(-0.99, 0.99, step)))
+p_list <- numeric(length(seq(-0.99, 0.99, step)))
+t_list <- numeric(length(seq(-0.99, 0.99, step)))
+lowbound_list <- numeric(length(seq(-0.99, 0.99, step)))
+highbound_list <- numeric(length(seq(-0.99, 0.99, step)))
+
+count <- 0
+
+for(i in seq(-0.99, 0.99, step)){
+  count <- count + 1
+  r <- i
+
+  res<-TOSTr(n = n,
+             r = r,
+             low_eqbound_r = low_eqbound_r,
+             high_eqbound_r = high_eqbound_r,
+             alpha = alpha,
+             plot = FALSE,
+             verbose = FALSE)
+
+  t_list[count]=r*sqrt(n-2)/sqrt(1-r^2)
+  p_list[count]=2*(1-pt(abs(t_list[count]),df=n-2))
+  sgpv_list[count] <- p_delta(res$LL_CI_TTEST,res$UL_CI_TTEST, low_eqbound_r, high_eqbound_r)
+  p_tost_list[count] <- max(res$TOST_p1, res$TOST_p2)
+  lowbound_list[count]=res$LL_CI_TTEST
+  highbound_list[count]=res$UL_CI_TTEST
+} 
+```
+```{r, echo=FALSE, dpi=600, fig.width=6, fig.height=5}
+par(xpd=F)
+plot(NA, 
+     ylim = c(0, 1), 
+     xlim = c(0, length(seq(-0.99, 0.99, step))),
+     yaxt = "n",
+     xaxt = "n",
+     ylab = "TOST p-values and 1-SGPV",
+     xlab = "Correlation")
+axis(1, at = seq(0,1981,1981/20), labels = seq(-1,1,0.1), las = 1)
+axis(2, at = seq(0,1,0.1), labels = seq(0,1,0.1), las = 1)
+  
+lines(1-sgpv_list, type="l", col = "darkgrey", lwd = 3, lty = 3)
+lines(p_tost_list, lwd = 3)
+abline(h = c(0.975, 0.5, 0.025),
+       lty = 2,
+       col = "grey")
+```
+*Figure 13*: Comparison of *p*-values from TOST (black line) and 1-SGPV (dotted grey curve) across a range of observed sample correlations (x-axis) tested against equivalence bounds of r = 0.4 and r = 0.8 with n = 10 and an alpha of 0.05. 
 
 #Discussion
 
