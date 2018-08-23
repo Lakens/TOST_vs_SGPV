@@ -581,8 +581,8 @@ for(i in seq(140, 150, step)){
   count <- count + 1
   m <- i
   mu <- 145
-  sd <- 500
-  n <- 1000000
+  sd <- 2
+  n <- 30
   low_eqbound = -2 
   high_eqbound = 2 
   alpha = 0.05
