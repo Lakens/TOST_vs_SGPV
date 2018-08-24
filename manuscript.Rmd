@@ -1,5 +1,5 @@
 ---
-title             : "Equivalence Testing and the Second Generation P-Value"
+title             : "Equivalence Testing and the Second Generation *P*-Value"
 shorttitle        : "TOST vs. SGPV"
 
 author:
@@ -60,7 +60,7 @@ The SGPV measures the degree to which a set of data-supported parameter values f
 If the estimation interval falls completely within the equivalence range, the SGPV is 1. 
 If the confidence interval falls completely outside of the equivalence range, the SGPV is 0. Otherwise the SGPV is a value between 0 and 1 that expresses the overlap of data-supported hypotheses and the equivalence range. 
 When calculating the SGPV the set of data-supported parameter values can be represented by a confidence interval (CI), although other one could also choose to use credible intervals or Likelihood support intervals (SI). 
-When a confidence interval is used, the SGPV and equivalence tests such as the Two One-Sided Tests (TOST) procedure [@lakens_equivalence_2017;@meyners_equivalence_2012;@schuirmann_comparison_1987] appear to have close ties, because both tests conpare a confidence interval against an equivalence range.
+When a confidence interval is used, the SGPV and equivalence tests such as the Two One-Sided Tests (TOST) procedure [@lakens_equivalence_2017;@meyners_equivalence_2012;@schuirmann_comparison_1987] appear to have close ties, because both tests compare a confidence interval against an equivalence range.
 Here, we aim to examine the similarities and differences between the TOST procedure and the SGPV.
 
 The TOST procedure also relies on the confidence interval around the effect. 
