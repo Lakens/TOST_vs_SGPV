@@ -566,7 +566,11 @@ As we move the observed mean closer to the test value in steps of 0.1 across A t
 
 ##When are the SGPV and Equivalence Test Unrelated?
 
+<<<<<<< HEAD
 There are three situations where *p*-values from TOST and SGPV are unrelated. The first two situations were discussed before and can be seen in Figure \ref{fig:TOSTSGPV1}. When the SGPV is either 0 or 1 *p*-values from the equivalence test fall between 0.975 and 1 or between 0 and 0.025. Because *p*-values approach 0 or 1, but are never exactly 0 or 1, and the SGPV is exactly 0 or 1, the two statistics are completely unrelated within these ranges. The easiest way to see this is by plotting the SGPV against the *p*-value from the TOST procedure. The situations where the SPGV and *p*-values from the TOST procedure are unrelated are indicated by the parts of the curve where there are vertical straight lines at second generation *p*-values of 0 and 1.
+=======
+There are 4 situations where *p*-values from TOST and SGPV are unrelated. The first two situations were discussed before and can be seen in Figure \ref{fig:TOSTSGPV1}. When the SGPV is either 0 or 1 *p*-values from the equivalence test fall between 0.975 and 1 or between 0 and 0.025. Because *p*-values approach 0 or 1, but are never exactly 0 or 1, and the SGPV is exactly 0 or 1, the two statistics are completely unrelated within these ranges. The easiest way to see this is by plotting the SGPV against the *p*-value from the TOST procedure. The situations where the SPGV and *p*-values from the TOST procedure are unrelated are indicated by the parts of the curve where there are vertical straight lines at second generation *p*-values of 0 and 1.
+>>>>>>> 06d352d2724e60bb0f131a51af8f086a9c2046cb
 ```{r, include=FALSE}
 step = 0.01
 
