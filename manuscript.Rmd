@@ -62,7 +62,7 @@ If the confidence interval falls completely outside of the equivalence range, th
 When calculating the SGPV the set of data-supported parameter values can be represented by a confidence interval (CI), although other one could also choose to use credible intervals or Likelihood support intervals (SI). 
 When a confidence interval is used, the SGPV and equivalence tests such as the Two One-Sided Tests (TOST) procedure [@lakens_equivalence_2017;@meyners_equivalence_2012;@schuirmann_comparison_1987] appear to have close ties, because both tests compare a confidence interval against an equivalence range.
 Here, we aim to examine the similarities and differences between the TOST procedure and the SGPV.
-
+ 
 The TOST procedure also relies on the confidence interval around the effect. 
 In the TOST procedure the data is tested against the lower equivalence bound in the first one-sided test, and against the upper equivalence bound in the second one-sided test [@lakens_equivalence_2018]. 
 If both tests statistically reject an effect as extreme or more extreme than the equivalence bound, you can conclude the observed effect is practically equivalent to zero from a Neyman-Pearson approach to statistical inferences. 
@@ -192,7 +192,7 @@ SGPV2 <- TOST_to_SGPV(tost_res = tost_res2)
 
 When the observed sample mean is 145, the sample size is 30, and the standard deviation is 2, and we are testing against equivalence bounds of 143 and 147 using the TOST procedure for a one-sample *t*-test, the equivalence test is significant, *t*(`r tost_res1$TOST_df`) = `r round(tost_res1$TOST_t1, digits = 2)`, *p* < .001. Because the 95% CI falls completely within the equivalence bounds, the SGPV is `r SGPV1` (see Figure \ref{fig:TOSTSGPV1}). 
 
-On the other hand, if the observed mean is 140, the equivalence test is not significant (the observed mean is far outside the equivalence range of 143 to 147), *t*(`r tost_res2$TOST_df`) = `r round(tost_res2$TOST_t1, digits = 2)`, *p* = `r round(tost_res2$TOST_p1, digits =  4)` (or more accurately, *p* > .999 as *p*-values are bounded between 0 and 1). Because the 95% CI falls completely outside the equivalence bounds, the SGPV is `r SGPV2` (see Figure  \ref{fig:TOSTSGPV1}). 
+On the other hand, when the observed mean is 140, the equivalence test is not significant (the observed mean is far outside the equivalence range of 143 to 147), *t*(`r tost_res2$TOST_df`) = `r round(tost_res2$TOST_t1, digits = 2)`, *p* = `r round(tost_res2$TOST_p1, digits =  4)` (or more accurately, *p* > .999 as *p*-values are bounded between 0 and 1). Because the 95% CI falls completely outside the equivalence bounds, the SGPV is `r SGPV2` (see Figure  \ref{fig:TOSTSGPV1}). 
 
 ##SGPV as a uniform measure of overlap
 
@@ -321,7 +321,7 @@ curve(dnorm(x, 2, 0.5), from=0.5, to=3.5, ylim = c(-6, 2), xlim = c(-3, 5), xlab
 
 Two other points always have to overlap. When the 95% CI falls completely inside the equivalence region, and one endpoint of the confidence interval is exactly equal to one of the equivalence bounds (see situation B in Figure \ref{fig:TOSTSGPV3}) the TOST *p*-value (which relies on a one-sided test) is always 0.025. The third point where the SGPV and the *p*-value from the TOST procedure should overlap is where the 95% CI falls completely outside of the equivalence range, but one endpoint of the confidence interval is equal to the equivalence bound (see situation C in Figure \ref{fig:TOSTSGPV3}), when the *p*-value will always be 0.975.
 
-As the observed mean in a one-sample *t*-test lies closer to the test value (in the plot below, from situation A to D, the mean gets closer to the test value by 0.1) the difference in the overlap changes uniformly.
+As the observed mean in a one-sample *t*-test lies closer to the test value (in Figure 4, from situation A to D, the mean gets closer to the test value by 0.1) the difference in the overlap changes uniformly.
 ```{r, include=FALSE}
 m <- 146
 mu <- 144.5
@@ -562,8 +562,10 @@ tail3 <- 1-pnorm(2, 1.3, 0.5)
 tail4 <- 1-pnorm(2, 1.2, 0.5)
 ```
 
-As we move the observed mean closer to the test value in steps of 0.1 across A to D the *p*-value calculated for normally distributed data is not uniformly distributed. The probability of observing data more extreme than the upper bound of 2 is (from A to D) `r round(tail1, digits = 3)`, `r round(tail2, digits = 3)`, `r round(tail3, digits = 3)`, and `r round(tail4, digits = 3)`. As we can see, the difference between A and B (`r round(tail1-tail2, digits = 3)`) is not the same as the difference between C And D (`r round(tail3-tail4, digits = 3)`). Indeed, the difference in *p*-values is the largest as you start at *p* = 0.5 (when the observed mean falls on the test value), which is why the line in Figure \ref{fig:TOSTSGPV1} is the steepest at *p* = 0.5. Note that where the SGPV reaches 1 or 0, *p*-values closely approximate 0 and 1, but never reach these values.
+As we move the observed mean closer to the test value in steps of 0.1 across A to D the *p*-value calculated for normally distributed data is not uniformly distributed. The probability of observing data more extreme than the upper bound of 2 is (from A to D) `r round(tail1, digits = 3)`, `r round(tail2, digits = 3)`, `r round(tail3, digits = 3)`, and `r round(tail4, digits = 3)`. As we can see, the difference between A and B (`r round(tail1-tail2, digits = 3)`) is not the same as the difference between C and D (`r round(tail3-tail4, digits = 3)`). Indeed, the difference in *p*-values is the largest as you start at *p* = 0.5 (when the observed mean falls on the test value), which is why the line in Figure \ref{fig:TOSTSGPV1} is the steepest at *p* = 0.5. Note that where the SGPV reaches 1 or 0, *p*-values closely approximate 0 and 1, but never reach these values.
+
 ##When are the SGPV and Equivalence Test Unrelated?
+
 There are 4 situations where *p*-values from TOST and SGPV are unrelated. The first two situations were discussed before and can be seen in Figure \ref{fig:TOSTSGPV1}. When the SGPV is either 0 or 1 *p*-values from the equivalence test fall between 0.975 and 1 or between 0 and 0.025. Because *p*-values approach 0 or 1, but are never exactly 0 or 1, and the SGPV is exactly 0 or 1, the two statistics are completely unrelated within these ranges. The easiest way to see this is by plotting the SGPV against the *p*-value from the TOST procedure. The situations where the SPGV and *p*-values from the TOST procedure are unrelated are indicated by the parts of the curve where there are vertical straight lines at second generation *p*-values of 0 and 1.
 ```{r, include=FALSE}
 step = 0.01
@@ -689,7 +691,7 @@ plot(sgpv_list,
      xlab = "SGPV")
 ```
 
-The *p*-value from the TOST procedure and the SGPV are also unrelated when the CI is wider than the equivalence range (so the precision is low) and overlaps with the upper and lower equivalence bound, but the CI is *not* twice as wide as the equivalence range. For example, in the example below, we see that the CI is only 1.79 times as wide as the equivalence bounds, but the CI overlaps with the lower and upper equivalence bounds. This means the SGPV is not set to 0.5, but it is constant across a range of observed means.
+The *p*-value from the TOST procedure and the SGPV are also unrelated when the CI is wider than the equivalence range (so the precision is low) and overlaps with the upper and lower equivalence bound, but the CI is *not* twice as wide as the equivalence range. In the example below, we see that the CI is only 1.79 times as wide as the equivalence bounds, but the CI overlaps with the lower and upper equivalence bounds. This means the SGPV is not set to 0.5, but it is constant across a range of observed means.
 ```{r, include=FALSE}
 m <- 0.2
 n <- 10
