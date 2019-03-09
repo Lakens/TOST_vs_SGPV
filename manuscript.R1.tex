@@ -25,8 +25,8 @@
 \hypersetup{unicode=true,
             pdftitle={Equivalence Testing and the Second Generation P-Value},
             pdfauthor={Daniël Lakens~\& Marie Delacre},
-            pdfkeywords={equivalence testing, second generation \emph{p}-values, hypothesis
-testing, TOST, statistical inference},
+            pdfkeywords={equivalence testing, second generation p-values, hypothesis testing,
+TOST, statistical inference},
             pdfborder={0 0 0},
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
@@ -72,7 +72,7 @@ testing, TOST, statistical inference},
 \affiliation{
 \vspace{0.5cm}
 \textsuperscript{1} Eindhoven University of Technology, Eindhoven, The Netherlands\\\textsuperscript{2} Service of Analysis of the Data, Université Libre de Bruxelles, Belgium}
-\keywords{equivalence testing, second generation *p*-values, hypothesis testing, TOST, statistical inference\newline\indent Word count: }
+\keywords{equivalence testing, second generation p-values, hypothesis testing, TOST, statistical inference}
 \usepackage{csquotes}
 \usepackage{upgreek}
 \captionsetup{font=singlespacing,justification=justified}
@@ -110,7 +110,7 @@ E-mail:
 
 \abstract{
 To move beyond the limitations of null-hypothesis tests, statistical
-approaches have been developed where the observed data is compared
+approaches have been developed where the observed data are compared
 against a range of values that are equivalent to the absence of a
 meaningful effect. Specifying a range of values around zero allows
 researchers to statistically reject the presence of effects large enough
@@ -123,15 +123,14 @@ established Two One-Sided Tests (TOST) equivalence testing procedure
 identical results under optimal conditions. Under suboptimal conditions
 (e.g., when the confidence interval is wider than the equivalence range,
 or when confidence intervals are asymmetric) the second generation
-\emph{p}-value becomes difficult to interpret as a descriptive
-statistic. The second generation \emph{p}-value is interpretable in a
-dichotomous manner (i.e., when the SGPV equals 0 or 1 because the
-confidence intervals lies completely within or outside of the
-equivalence range), but this dichotomous interpretation does not require
-calculations. We conclude that equivalence tests yield more consistent
-\emph{p}-values, distinguish between datasets that yield the same second
-generation \emph{p}-value, and allow for easier control of Type I and
-Type II error rates.
+\emph{p}-value becomes difficult to interpret. The second generation
+\emph{p}-value is interpretable in a dichotomous manner (i.e., when the
+SGPV equals 0 or 1 because the confidence intervals lies completely
+within or outside of the equivalence range), but this dichotomous
+interpretation does not require calculations. We conclude that
+equivalence tests yield more consistent \emph{p}-values, distinguish
+between datasets that yield the same second generation \emph{p}-value,
+and allow for easier control of Type I and Type II error rates.
 
 
 }
@@ -141,7 +140,7 @@ Type II error rates.
 
 To test predictions researchers predominantly rely on null-hypothesis
 tests. This statistical approach can be used to examine whether observed
-data is sufficiently surprising under the null hypothesis to reject an
+data are sufficiently surprising under the null hypothesis to reject an
 effect that equals exactly zero. Null-hypothesis tests have an important
 limitation, in that this procedure can only reject the hypothesis that
 there is no effect, while scientists should also be able to provide
@@ -157,11 +156,11 @@ Serlin \& Lapsley, 1985; Spiegelhalter, Freedman, \& Parmar, 1994;
 Wellek, 2010; Westlake, 1972).
 
 Second generation \emph{p}-values (SGPV) were recently proposed to as a
-descriptive statistic that represents \enquote{the proportion of
-data-supported hypotheses that are also null hypotheses} (Blume et al.,
-2018). The researcher specifies an equivalence range around a null
-hypothesis of values that are considered practically equivalent to the
-null hypothesis. The SGPV measures the degree to which a set of
+statistic that represents \enquote{the proportion of data-supported
+hypotheses that are also null hypotheses} (Blume et al., 2018). The
+researcher specifies an equivalence range around a null hypothesis of
+values that are considered practically equivalent to the null
+hypothesis. The SGPV measures the degree to which a set of
 data-supported parameter values falls within the interval null
 hypothesis. If the estimation interval falls completely within the
 equivalence range, the SGPV is 1. If the confidence interval falls
@@ -176,16 +175,16 @@ Two One-Sided Tests (TOST) procedure (Lakens, 2017; Meyners, 2012;
 Quertemont, 2011; Schuirmann, 1987) appear to have close ties, because
 both tests compare a confidence interval against an equivalence range.
 Here, we aim to examine the similarities and differences between the
-TOST procedure and the SGPV. We limit our analysis to normally
-distributed continuous data.
+TOST procedure and the SGPV. We limit our analysis to continuous data
+sampled from a bivariate normal distribution.
 
 The TOST procedure also relies on the confidence interval around the
-effect. In the TOST procedure the data is tested against the lower
+effect. In the TOST procedure the data are tested against the lower
 equivalence bound in the first one-sided test, and against the upper
 equivalence bound in the second one-sided test (Lakens, Scheel, \&
 Isager, 2018). For an excellent discussion of the strengths and
 weaknesses of different frequentist equivalence tests, including
-alternatives to the TOST procedure, see (Meyners, 2012). If both tests
+alternatives to the TOST procedure, see Meyners (2012). If both tests
 statistically reject an effect as extreme or more extreme than the
 equivalence bound, you can conclude the observed effect is practically
 equivalent to zero from a Neyman-Pearson approach to statistical
@@ -341,7 +340,7 @@ one-sample \emph{t}-test lies closer to the test value, from situation A
 to D, the mean gets closer to the test value by 0.1) the difference in
 the overlap changes uniformly. As we move the observed mean closer to
 the test value in steps of 0.1 across A to D the \emph{p}-value
-calculated for normally distributed data is not uniformly distributed.
+calculated for normally distributed data are not uniformly distributed.
 The probability of observing data more extreme than the upper bound of 2
 is (from A to D) 0.16, 0.12, 0.08, and 0.06. As we can see, the
 difference between A and B (0.04) is not the same as the difference
@@ -417,8 +416,9 @@ We can examine this situation by calculating the SGPV and performing the
 TOST for a situation where sample sizes are small and the equivalence
 range is narrow, such that the CI is more than twice as large as the
 equivalence range (see Figure \ref{fig:TOSTSGPV6}). When the two
-statistics are plotted against each other we can see where they are
-unrelated (indicated by straight lines in the curve, see Figure
+statistics are plotted against each other we can see where the SGPV is
+the same while the TOST \emph{p}-value still differentiates different
+observed means (indicated by straight lines in the curve, see Figure
 \ref{fig:TOSTSGPV7}). We see the SGPV is 0.5 for a range of observed
 means where the \emph{p}-value from the equivalence test still varies.
 It should be noted that in these calculations the \emph{p}-values for
@@ -444,14 +444,16 @@ the TOST procedure and the SGPV for the same scenario as in Figure
 \ref{fig:TOSTSGPV6}.}
 \end{figure}
 
-The \emph{p}-value from the TOST procedure and the SGPV are also
-unrelated when the CI is wider than the equivalence range (so the
-precision is low) and overlaps with the upper and lower equivalence
-bound, but the CI is \emph{not} twice as wide as the equivalence range.
-In the example below, we see that the CI is only 1.79 times as wide as
-the equivalence bounds, but the CI overlaps with the lower and upper
-equivalence bounds (Figure \ref{fig:TOSTSGPV8}). This means the SGPV is
-not set to 0.5, but it is constant across a range of observed means.
+The \emph{p}-value from the TOST procedure still differentiates observed
+means, while the SGPV does not, when the CI is wider than the
+equivalence range (so the precision is low) and overlaps with the upper
+and lower equivalence bound, but the CI is \emph{not} twice as wide as
+the equivalence range. In the example below, we see that the CI is only
+1.79 times as wide as the equivalence bounds, but the CI overlaps with
+the lower and upper equivalence bounds (Figure \ref{fig:TOSTSGPV8}).
+This means the SGPV is not set to 0.5, but it is constant across a range
+of observed means, while the TOST \emph{p}-value is not constant across
+this range.
 
 \begin{figure}
 \centering
@@ -483,10 +485,10 @@ The SGPV is not set to 0.5 (horizontal light grey line) but reaches a
 maximum slightly above 0.5 across a range of observed means.}
 \end{figure}
 
-If we once more plot the two statistics against each other to see where
-they are unrelated (indicated by straight lines in the curve), we see
-the SGPV is 0.56 for a range of observed means where the \emph{p}-value
-from the equivalence test still varies (Figure \ref{fig:TOSTSGPV10}).
+If we once more plot the two statistics against each other we see the
+SGPV is 0.56 for a range of observed means where the \emph{p}-value from
+the equivalence test still varies, as indicated by the straight section
+of the line (Figure \ref{fig:TOSTSGPV10}).
 
 \begin{figure}
 \centering
@@ -496,22 +498,20 @@ the TOST procedure and the SGPV for the same scenario as in Figure
 \ref{fig:TOSTSGPV9}.}
 \end{figure}
 
-To conclude this section, there are three situations where the
-\emph{p}-value from the TOST procedure is unrelated to the SGPV. In all
-these situations the \emph{p}-value for the equivalence test
-differentiates tests with different means, but the SGPV does not.
-Therefore, as a purely continuous descriptive statistic, the SGPV is
-more limited than the \emph{p}-value from the TOST procedure.
+To conclude this section, there are situations where the \emph{p}-value
+from the TOST procedure continues to differentiate, while the SGPV does
+not. Therefore, interpreted as a continuous statistic, the SGPV is more
+limited than the \emph{p}-value from the TOST procedure.
 
-\subsection{The relation between equivalence tests and SGPV when for
+\subsection{The relation between equivalence tests and SGPV for
 asymmetrical confidence intervals around
-correlations}\label{the-relation-between-equivalence-tests-and-sgpv-when-for-asymmetrical-confidence-intervals-around-correlations}
+correlations}\label{the-relation-between-equivalence-tests-and-sgpv-for-asymmetrical-confidence-intervals-around-correlations}
 
 So far we have only looked at the relation between equivalence tests and
 the SGPV when confidence intervals are symmetric (e.g., for confidence
 intervals around mean differences). For correlations, which are bound
 between -1 and 1, confidence intervals are only symmetric for a
-correlation of exactly 0. The confidence interval for a correaltion
+correlation of exactly 0. The confidence interval for a correlation
 becomes increasingly asymmetric as the observed correlation nears -1 or
 1. For example, with ten observations, an observed correlation of 0 has
 a symmetric 95\% confidence interval ranging from -0.630 to 0.630, while
@@ -574,39 +574,40 @@ confidence interval for r = 0 is symmetric.}
 \end{figure}
 
 This example illustrates the difference between a proportion and a
-probability. As long as data is normally distributed, there is always a
-50\% probability of observing a correlation smaller or larger than the
-true correlation, but the SGPV for this situation depends on how far
-away the observed correlation is from 0. The further away from 0, the
-larger the SGPV when the observed mean falls on the equivalence bound.
-The SGPV is the proportion of values in a 95\% confidence interval that
-overlap with the equivalence range, but not the probability that these
-values will be observed. In the most extreme case (i.e., a sample size
-of 4, and equivalence bounds set to r = -0.99 and 0.99, with an observed
-correlation of 0.99) 58.10\% of the confidence interval overlaps with
-the equivalence range, even though in the long run only 50\% of the
-correlations observed in the future will fall in this range. It should
-be noted that in larger sample sizes the SGPV is closer to 0.5 whenever
-the observed correlation falls on the equivalence bound, but this
-extreme example nevertheless clearly illustrates the difference between
-question the SGPV answers, and the question a \emph{p}-value answers.
-The conclusion of this section on asymmetric confidence intervals is
-that a SGPV of 1 or 0 can still be interpreted as a \emph{p} \textless{}
-0.025 or \emph{p} \textgreater{} 0.975 in an equivalence test, since the
-SGPV and \emph{p}-value for the TOST procedure are always directly
-related at the values \emph{p} = 0.025 and \emph{p} = 0.975. Although
-Blume et al. (2018) state that \enquote{the degree of overlap conveys
-how compatible the data are with the null premise} this definition of
-what the SGPV provides does not hold for asymmetric confidence
-intervals. Although a SGPV of 1 or 0 can be directly interpreted, a SGPV
-between 0 and 1 is not interpretable as \enquote{compatibility with the
-null hypothesis} under the assumption of normally distributed data, and
-the generalizability of this statement needs to be examined beyond
-normally distributed data. Indeed, Blume and colleagues write in the
-supplemental material that \enquote{The magnitude of an inconclusive
-second-generation \emph{p}-value can vary slightly when the effect size
-scale is transformed. However definitive findings, i.e.~a \emph{p}-value
-of 0 or 1 are \emph{not} affected by the scale changes.}
+probability. As long as data are sampled from a bivariate normal
+distribution, there is always a 50\% probability of observing a
+correlation smaller or larger than the true correlation, but the SGPV
+for this situation depends on how far away the observed correlation is
+from 0. The further away from 0, the larger the SGPV when the observed
+mean falls on the equivalence bound. The SGPV is the proportion of
+values in a 95\% confidence interval that overlap with the equivalence
+range, but not the probability that these values will be observed. In
+the most extreme case (i.e., a sample size of 4, and equivalence bounds
+set to r = -0.99 and 0.99, with an observed correlation of 0.99) 58.10\%
+of the confidence interval overlaps with the equivalence range, even
+though in the long run only 50\% of the correlations observed in the
+future will fall in this range. It should be noted that in larger sample
+sizes the SGPV is closer to 0.5 whenever the observed correlation falls
+on the equivalence bound, but this extreme example nevertheless clearly
+illustrates the difference between question the SGPV answers, and the
+question a \emph{p}-value answers. The conclusion of this section on
+asymmetric confidence intervals is that a SGPV of 1 or 0 can still be
+interpreted as a \emph{p} \textless{} 0.025 or \emph{p} \textgreater{}
+0.975 in an equivalence test, since the SGPV and \emph{p}-value for the
+TOST procedure are always directly related at the values \emph{p} =
+0.025 and \emph{p} = 0.975. Although Blume et al. (2018) state that
+\enquote{the degree of overlap conveys how compatible the data are with
+the null premise} this definition of what the SGPV provides does not
+hold for asymmetric confidence intervals. Although a SGPV of 1 or 0 can
+be directly interpreted, a SGPV between 0 and 1 is not interpretable as
+\enquote{compatibility with the null hypothesis} under the assumption of
+a bivariate normal distribution, and the generalizability of this
+statement needs to be examined beyond normal bivariate distributions.
+Indeed, Blume and colleagues write in the supplemental material that
+\enquote{The magnitude of an inconclusive second-generation
+\emph{p}-value can vary slightly when the effect size scale is
+transformed. However definitive findings, i.e.~a \emph{p}-value of 0 or
+1 are \emph{not} affected by the scale changes.}
 
 \subsection{What are the Relative Strengths and Weaknesses of
 Equivalence Testing and the
@@ -623,7 +624,7 @@ what this number tells us about the data we have collected. This is not
 too problematic, since the main use of the SGPV (e.g., in all examples
 provided by Blume and colleagues) seems to be to examine whether the
 SGPV is 0, 1, or inconclusive. As already mentioned, this interpretation
-of a SGPV as is very similar to the Neyman-Pearson interpretation of an
+of a SGPV is very similar to the Neyman-Pearson interpretation of an
 equivalence test and a minimum effect tests (which are complementary).
 The difference is that where a SGPV of 1 can be interpreted as \emph{p}
 \textless{} .025, equivalence tests provide exact \emph{p}-values, and
@@ -647,7 +648,7 @@ Equivalence tests combined with null-hypothesis tests classify results
 into four possible categories, and for example allow researchers to
 conclude an effect is significant \emph{and} equivalent (i.e.,
 statistically different from zero, but also too small to be considered
-meaningful, see (Lakens et al., 2018)).
+meaningful, see Lakens et al. (2018)).
 
 An important issue when calculating the SGPV is its reliance on the
 \enquote{small sample correction}, where the SGPV is set to 0.5 whenever
@@ -695,14 +696,14 @@ Blume et al. (2018) claim that \enquote{Adjustments for multiple
 comparisons are obviated} (p.~15). However, this is not correct. Given
 the direct relationship between TOST and SGPV highlighted in this
 manuscript (where to TOST \emph{p} = 0.025 equals SGPV = 1, as long as
-the SGPV is calculated based on confidence intervals, and assuming
-continuous and normally distributed data), not correcting for multiple
-comparisons will inflate the probability of concluding the absence of a
-meaningful effect based on the SGPV in exactly the same way as for
-equivalence tests. Whenever statistical tests are interpreted as support
-for a hypothesis (e.g., SPGV = 0 or SGPV =1), it is possible do so
-erroneously, and if researchers want to control error rates, they need
-to correct for multiple comparisons.
+the SGPV is calculated based on confidence intervals, and assuming data
+sampled from a continuous bivariate normal distribution), not correcting
+for multiple comparisons will inflate the probability of concluding the
+absence of a meaningful effect based on the SGPV in exactly the same way
+as for equivalence tests. Whenever statistical tests are interpreted as
+support for a hypothesis (e.g., SPGV = 0 or SGPV =1), it is possible do
+so erroneously, and if researchers want to control error rates, they
+need to correct for multiple comparisons.
 
 \section{Conclusion}\label{conclusion}
 
