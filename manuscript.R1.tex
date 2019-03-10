@@ -155,7 +155,7 @@ range} and researchers can test if a meaningful effect is absent (Hauck
 Serlin \& Lapsley, 1985; Spiegelhalter, Freedman, \& Parmar, 1994;
 Wellek, 2010; Westlake, 1972).
 
-Second generation \emph{p}-values (SGPV) were recently proposed to as a
+Second generation \emph{p}-values (SGPV) were recently proposed as a
 statistic that represents \enquote{the proportion of data-supported
 hypotheses that are also null hypotheses} (Blume et al., 2018). The
 researcher specifies an equivalence range around a null hypothesis of
@@ -212,55 +212,62 @@ interval. The second term is a \enquote{small sample correction} (which
 will be discussed later) that comes into play whenever the confidence
 interval is more than twice as wide as the equivalence range. To examine
 the relation between the TOST \emph{p}-value and the SGPV we can
-calculate both statistics across a range of observed effect sizes. In
-Figure \ref{fig:TOSTSGPV1} \emph{p}-values are plotted for the TOST
-procedure and the SGPV. The statistics are calculated for hypothetical
-one-sample \emph{t}-tests for observed means ranging from 140 to 150 (on
-the x-axis). The equivalence range is set to 145 ± 2 (i.e., an
-equivalence range from 143 to 147), the observed standard deviation is
-assumed to be 2, and the sample size is 30. For example, for the
-left-most point in Figure \ref{fig:TOSTSGPV1} the SGPV and the TOST
-\emph{p}-value is calculated for a hypothetical study with a sample size
-of 30, an observed standard deviation of 2, and an observed mean of 140,
-where the \emph{p}-value for the equivalence test is 1, and the SGPV is
-0. Our conclusions about the relationship between TOST \emph{p}-values
-and SGPV hold for an SGPV calculated from confidence intervals, and
-assuming continuous normally distributed data. Readers can explore the
-relationship between TOST \emph{p}-values and SGPV for themselves in an
-online Shiny app: \url{http://shiny.ieis.tue.nl/TOST_vs_SGPV/}.
+calculate both statistics across a range of observed effect sizes.
+Replicating the example by Blume et al. (2018), in Figure
+\ref{fig:TOSTSGPV1} \emph{p}-values are plotted for the TOST procedure
+and the SGPV. The statistics are calculated for hypothetical one-sample
+\emph{t}-tests for observed means ranging from 140 to 150 (on the
+x-axis). The equivalence range is set to 145 ± 2 (i.e., an equivalence
+range from 143 to 147), the observed standard deviation is assumed to be
+2, and the sample size is 30. For example, for the left-most point in
+Figure \ref{fig:TOSTSGPV1} the SGPV and the TOST \emph{p}-value is
+calculated for a hypothetical study with a sample size of 30, an
+observed standard deviation of 2, and an observed mean of 140, where the
+\emph{p}-value for the equivalence test is 1, and the SGPV is 0.
 
 \begin{figure}
 \centering
 \includegraphics{manuscript.R1_files/figure-latex/TOSTSGPV1-1.pdf}
 \caption{\label{fig:TOSTSGPV1}Comparison of \emph{p}-values from TOST (black
-line) and SGPV (dotted grey line) across a range of observed sample
-means (x-axis) tested against a mean of 145 in a one-sample
-\emph{t}-test with a sample size of 30 and a standard deviation of 2.}
+line) and SGPV (grey line) across a range of observed sample means
+(x-axis) tested against a mean of 145 in a one-sample \emph{t}-test with
+a sample size of 30 and a standard deviation of 2, illustrating that
+when the TOST \emph{p}-value = 0.5, the SGPV = 0.5, when the TOST
+\emph{p}-value is 0.975, 1-SGPV = 1, and when the TOST \emph{p}-value =
+0.025, 1-SGPV = 0.}
 \end{figure}
+
+Our conclusions about the relationship between TOST \emph{p}-values and
+SGPV hold for second generation \emph{p}-values calculated from
+confidence intervals, and assuming data is sampled from a bivariate
+normal distribution. Readers can explore the relationship between TOST
+\emph{p}-values and SGPV for themselves in an online Shiny app:
+\url{http://shiny.ieis.tue.nl/TOST_vs_SGPV/}.
 
 The SGPV treats the equivalence range as the null-hypothesis, while the
 TOST procedure treats the values outside of the equivalence range as the
 null-hypothesis. For ease of comparison we can plot 1-SGPV (see Figure
 \ref{fig:TOSTSGPV2}) to make the values more easily comparable. We see
 that the \emph{p}-value from the TOST procedure and the SGPV follow each
-other closely. When we discuss the relationship between the p-values
-from TOST and the SGPV, we focus on their correspondence at three
-values, namely where the TOST \emph{p} = 0.025 and SGPV is 1, where the
-TOST \emph{p} = 0.5 and SGPV = 0.5, and where the TOST \emph{p} = 0.975
-and SGPV = 1. These three values are important for the SGPV because they
-indicate the values at which the SGPV indicates the data should be
-interpreted as compatible with the null hypothesis (SGPV = 1), or with
-the alternative hypothesis (SGPV = 0), or when the data are strictly
-inconclusive (SGPV = 0.5). These three points of overlap are indicated
-by the horizontal dotted lines in Figure \ref{fig:TOSTSGPV2}.
+other closely. When we discuss the relationship between the
+\emph{p}-values from TOST and the SGPV, we focus on their correspondence
+at three values, namely where the TOST \emph{p} = 0.025 and SGPV is 1,
+where the TOST \emph{p} = 0.5 and SGPV = 0.5, and where the TOST
+\emph{p} = 0.975 and SGPV = 1. These three values are important for the
+SGPV because they indicate the values at which the SGPV indicates the
+data should be interpreted as compatible with the null hypothesis (SGPV
+= 1), or with the alternative hypothesis (SGPV = 0), or when the data
+are strictly inconclusive (SGPV = 0.5). These three points of overlap
+are indicated by the horizontal dotted lines in Figure
+\ref{fig:TOSTSGPV2} at TOST \emph{p}-values of 0.975, 0.5, and 0.025.
 
 \begin{figure}
 \centering
 \includegraphics{manuscript.R1_files/figure-latex/TOSTSGPV2-1.pdf}
 \caption{\label{fig:TOSTSGPV2}Comparison of \emph{p}-values from TOST (black
-line) and 1-SGPV (dotted grey line) across a range of observed sample
-means (x-axis) tested against a mean of 145 in a one-sample
-\emph{t}-test with a sample size of 30 and a standard deviation of 2.}
+line) and 1-SGPV (grey line) across a range of observed sample means
+(x-axis) tested against a mean of 145 in a one-sample \emph{t}-test with
+a sample size of 30 and a standard deviation of 2.}
 \end{figure}
 
 When the observed sample mean is 145, the sample size is 30, and the
@@ -305,24 +312,27 @@ completely inside the equivalence region, and one endpoint of the
 confidence interval is exactly equal to one of the equivalence bounds
 (see situation B in Figure \ref{fig:TOSTSGPV3}) the TOST \emph{p}-value
 (which relies on a one-sided test) is always 0.025, and the SGPV is 1.
-The third point where the SGPV and the \emph{p}-value from the TOST
-procedure should overlap is where the 95\% CI falls completely outside
-of the equivalence range, but one endpoint of the confidence interval is
-equal to the equivalence bound (see situation C in Figure
-\ref{fig:TOSTSGPV3}), when the \emph{p}-value will always be 0.975, and
-the SGPV is 0. Note that this situation is in essence a minimum-effect
-test (Murphy, Myors, \& Wolach, 2014). The goal of a minimum-effect is
-not just to reject a difference of zero, but to reject the smallest
-effect size of interest (i.e., the equivalence bounds). An equivalence
-test and minimum effect test against the same equivalence bound are
-complementary, and when a TOST \emph{p}-value is larger than 0.975, the
-\emph{p}-value for the minimum effect test is smaller than 0.05, and the
-minimum effect test provides no additional information that can not be
-derived from the \emph{p}-value from the equivalence test. The SGPV
-summarizes the information from an equivalence test and a minimum-effect
-test. These can be two relevant questions to ask, although it often
-makes sense to combine an equivalence test and a null-hypothesis test
-instead (Lakens et al., 2018).
+Note that when sample sizes are small or equivalence bounds are narrow,
+small \emph{p}-values for the TOST or a SGPV = 1 might not be observed
+in practice if too few observations are collected. The third point where
+the SGPV and the \emph{p}-value from the TOST procedure should overlap
+is where the 95\% CI falls completely outside of the equivalence range,
+but one endpoint of the confidence interval is equal to the equivalence
+bound (see situation C in Figure \ref{fig:TOSTSGPV3}), when the
+\emph{p}-value will always be 0.975, and the SGPV is 0. Note that this
+situation is in essence a minimum-effect test (Murphy, Myors, \& Wolach,
+2014). The goal of a minimum-effect is not just to reject a difference
+of zero, but to reject the smallest effect size of interest (i.e., the
+equivalence bounds). An equivalence test and minimum effect test against
+the same equivalence bound are complementary, and when a TOST
+\emph{p}-value is larger than 0.975, the \emph{p}-value for the minimum
+effect test is smaller than 0.05 (and therefore the minimum effect test
+provides no additional information that can not be derived from the
+\emph{p}-value from the equivalence test). The SGPV summarizes the
+information from an equivalence test (and the complementary
+minimum-effect test). These can be two relevant questions to ask,
+although it often makes sense to combine an equivalence test and a
+null-hypothesis test instead (Lakens et al., 2018).
 
 \begin{figure}
 \centering
@@ -337,19 +347,18 @@ the percentage of overlap between A and B (-0.05) is identical to the
 difference in the percentage of overlap between C and D as the mean gets
 0.1 closer to the test value (-0.05). As the observed mean in a
 one-sample \emph{t}-test lies closer to the test value, from situation A
-to D, the mean gets closer to the test value by 0.1) the difference in
-the overlap changes uniformly. As we move the observed mean closer to
-the test value in steps of 0.1 across A to D the \emph{p}-value
-calculated for normally distributed data are not uniformly distributed.
-The probability of observing data more extreme than the upper bound of 2
-is (from A to D) 0.16, 0.12, 0.08, and 0.06. As we can see, the
-difference between A and B (0.04) is not the same as the difference
-between C and D (0.03). Indeed, the difference in \emph{p}-values is the
-largest as you start at \emph{p} = 0.5 (when the observed mean falls on
-the test value), which is why the line in Figure \ref{fig:TOSTSGPV1} is
-the steepest at \emph{p} = 0.5. Note that where the SGPV reaches 1 or 0,
-\emph{p}-values closely approximate 0 and 1, but never reach these
-values.
+to D, the difference in the overlap changes uniformly. As we move the
+observed mean closer to the test value in steps of 0.1 across A to D the
+\emph{p}-value calculated for normally distributed data are not
+uniformly distributed. The probability of observing data more extreme
+than the upper bound of 2 is (from A to D) 0.16, 0.12, 0.08, and 0.05.
+As we can see, the difference between A and B (0.04) is not the same as
+the difference between C and D (0.03). Indeed, the difference in
+\emph{p}-values is the largest as you start at \emph{p} = 0.5 (when the
+observed mean falls on the test value), which is why the line in Figure
+\ref{fig:TOSTSGPV1} is the steepest at \emph{p} = 0.5. Note that where
+the SGPV reaches 1 or 0, \emph{p}-values closely approximate 0 and 1,
+but never reach these values.
 
 \subsection{\texorpdfstring{When different \emph{p}-values for
 equivalence tests yield the same
@@ -360,7 +369,7 @@ between observed results, while the SGPV does not differentiate. The
 first two situations were discussed before and can be seen in Figure
 \ref{fig:TOSTSGPV1}. When the SGPV is either 0 or 1, \emph{p}-values
 from the equivalence test fall between 0.975 and 1 or between 0 and
-0.025. While the SGPV is 1 as long as the confidence interval falls
+0.025. Where the SGPV is 1 as long as the confidence interval falls
 completely within the equivalence bounds, the \emph{p}-value for the
 TOST continues to differentiate between results as a function of how far
 the confidence interval lies within the equivalence bounds (the further
@@ -405,10 +414,10 @@ range exceeds 2:1 and the CI overlaps with the upper and lower bounds.
 \centering
 \includegraphics{manuscript.R1_files/figure-latex/TOSTSGPV6-1.pdf}
 \caption{\label{fig:TOSTSGPV6}Comparison of \emph{p}-values from TOST (black
-line) and SGPV (dotted grey line) across a range of observed sample
-means (x-axis). Because the sample size is small (n = 10) and the CI is
-more than twice as wide as the equivalence range (set to -0.4 to 0.4),
-the SGPV is set to 0.5 (horizontal lightgrey line) across a range of
+line) and SGPV (grey line) across a range of observed sample means
+(x-axis). Because the sample size is small (n = 10) and the CI is more
+than twice as wide as the equivalence range (set to -0.4 to 0.4), the
+SGPV is set to 0.5 (horizontal lightgrey line) across a range of
 observed means.}
 \end{figure}
 
@@ -425,14 +434,11 @@ It should be noted that in these calculations the \emph{p}-values for
 the TOST procedure are \emph{never} smaller than 0.05 (i.e., they do not
 get below 0.05 on the y-axis). In other words, we cannot conclude
 equivalence based on any of the observed means. This happens because the
-TOST \emph{p}-value is smaller than 0.05 only when the 90\% CI falls
-completely between the upper and lower equivalence bounds. However, we
-are examining a scenario where the 90\% CI is so wide that it never
-falls completely within the two equivalence bounds, and thus the
-equivalence test is never significant. As Lakens (2017) notes:
-\enquote{in small samples (where CIs are wide), a study might have no
-statistical power (i.e., the CI will always be so wide that it is
-necessarily wider than the equivalence bounds).} None of the
+we are examining a scenario where the 90\% CI is so wide that it never
+falls completely within the two equivalence bounds. As Lakens (2017)
+notes: \enquote{in small samples (where CIs are wide), a study might
+have no statistical power (i.e., the CI will always be so wide that it
+is necessarily wider than the equivalence bounds).} None of the
 \emph{p}-values based on the TOST procedure are below 0.05, and thus, in
 the long run we have 0\% power.
 
@@ -477,11 +483,11 @@ and the equivalence range.
 \centering
 \includegraphics{manuscript.R1_files/figure-latex/TOSTSGPV9-1.pdf}
 \caption{\label{fig:TOSTSGPV9}Comparison of \emph{p}-values from TOST (black
-line) and SGPV (dotted grey line) across a range of observed sample
-means (x-axis). The sample size is small (n = 10), but because the sd is
-half as big as in Figure \ref{fig:TOSTSGPV7} (1 instead of 2) the CI is
-less than twice as wide as the equivalence range (set to -0.4 to 0.4).
-The SGPV is not set to 0.5 (horizontal light grey line) but reaches a
+line) and SGPV (grey line) across a range of observed sample means
+(x-axis). The sample size is small (n = 10), but because the sd is half
+as big as in Figure \ref{fig:TOSTSGPV7} (1 instead of 2) the CI is less
+than twice as wide as the equivalence range (set to -0.4 to 0.4). The
+SGPV is not set to 0.5 (horizontal light grey line) but reaches a
 maximum slightly above 0.5 across a range of observed means.}
 \end{figure}
 
@@ -518,10 +524,11 @@ a symmetric 95\% confidence interval ranging from -0.630 to 0.630, while
 and observed correlation of 0.7 has an asymmetric 95\% confidence
 interval ranging from 0.126 to 0.993. Note that calculating confidence
 intervals for a correlation involves a Fisher's z-transformation, which
-transforms values such that they are approximately normally distributed,
-which allows one to compute symmetric confidence intervals, which are
-then retransformed into a correlation, where the confidence intervals
-are asymmetric if the correlation is not exactly zero.
+transforms values such that they are approximately normally
+z-distributed, which allows one to compute symmetric confidence
+intervals. These confidence intervals are then retransformed into a
+correlation, where the confidence intervals are asymmetric if the
+correlation is not exactly zero.
 
 The effect of asymmetric confidence intervals around correlations is
 most noticeable at smaller sample sizes. In Figure \ref{fig:TOSTSGPV11}
@@ -532,20 +539,21 @@ bounds are set to -0.45 and 0.45, with an alpha of 0.05. As the observed
 correlation in the sample moves from -1 to 0 the \emph{p}-value from the
 equivalence test becomes smaller, as does 1-SGPV. The pattern is quite
 similar to that in Figure \ref{fig:TOSTSGPV2}. The \emph{p}-value for
-the TOST procedure and 1-SGPV are still identical when \emph{p}-values
-are 0.975 and 0.025 (indicated by the upper and lower horizontal dotted
-lines). There are two important differences, however. First of all, the
-SGPV is no longer a straight line, but a curve, due to the asymmetry in
-the 95\% CI. Second, and most importantly, the \emph{p}-value for the
-equivalence test and the SGPV do no longer overlap at \emph{p} = 0.5.
+the TOST procedure and 1-SGPV are still related as discussed above, with
+TOST \emph{p}-values of 0.975 and 0.025 corresponding to a 1-SGPV of 1
+and 0, respectively. There are two important differences, however. First
+of all, the SGPV is no longer a straight line, but a curve, due to the
+asymmetry in the 95\% CI. Second, and most importantly, the
+\emph{p}-value for the equivalence test and the SGPV do no longer
+overlap at \emph{p} = 0.5.
 
 \begin{figure}
 \centering
 \includegraphics{manuscript.R1_files/figure-latex/TOSTSGPV11-1.pdf}
 \caption{\label{fig:TOSTSGPV11}Comparison of \emph{p}-values from TOST
-(black line) and 1-SGPV (dotted grey curve) across a range of observed
-sample correlations (x-axis) tested against equivalence bounds of r =
--0.45 and r = 0.45 with n = 30 and an alpha of 0.05.}
+(black line) and 1-SGPV (grey curve) across a range of observed sample
+correlations (x-axis) tested against equivalence bounds of r = -0.45 and
+r = 0.45 with n = 30 and an alpha of 0.05.}
 \end{figure}
 
 The reason that the equivalence test and SGPV no longer overlap is also
@@ -558,19 +566,19 @@ the same as the equivalence bound, it is equally likely to find an
 effect more extreme than the equivalence bound, as it is to observe an
 effect that is less extreme than the equivalence bound. However, as can
 be seen in Figure \ref{fig:TOSTSGPV12}, the two second generation
-\emph{p}-values associated with the observed correlations at r = -0.45
-and r = 0.45 are larger than 50\%. Because the confidence intervals are
-asymmetric around the observed effect size of 0.45 (ranging from 0.11 to
-0.70) according to Blume et al. (2018) 58.11\% of the data-supported
-hypotheses are null hypotheses, and therefore 58.10\% of the
-data-supported hypotheses are compatible with the null premise.
+\emph{p}-values associated with the observed correlations at \emph{r} =
+-0.45 and \emph{r} = 0.45 are larger than 50\%. Because the confidence
+intervals are asymmetric around the observed effect size of 0.45
+(ranging from 0.11 to 0.70) according to Blume et al. (2018) 58.11\% of
+the data-supported hypotheses are null hypotheses, and therefore 58.10\%
+of the data-supported hypotheses are compatible with the null premise.
 
 \begin{figure}
 \centering
 \includegraphics{manuscript.R1_files/figure-latex/TOSTSGPV12-1.pdf}
 \caption{\label{fig:TOSTSGPV12}Three 95\% confidence intervals for observed
-effect sizes of r = -0.45, r = 0, and r = 0.45 for n = 30. Only the
-confidence interval for r = 0 is symmetric.}
+effect sizes of \emph{r} = -0.45, \emph{r} = 0, and \emph{r} = 0.45 for
+n = 30. Only the confidence interval for \emph{r} = 0 is symmetric.}
 \end{figure}
 
 This example illustrates the difference between a proportion and a
@@ -615,30 +623,31 @@ SGPV?}\label{what-are-the-relative-strengths-and-weaknesses-of-equivalence-testi
 
 When introducing a new statistical method, it is important to compare it
 to existing approaches and specify its relative strengths and
-weaknesses. First of all, even though a SGPV of 1 or 0 has a clear
-interpretation (we can reject effects outside or inside the equivalence
-range), intermediate values are not as easy to interpret (especially for
-effects that have asymmetric confidence intervals). In one sense, they
-are what they are (the proportion of overlap), but it can be unclear
-what this number tells us about the data we have collected. This is not
-too problematic, since the main use of the SGPV (e.g., in all examples
-provided by Blume and colleagues) seems to be to examine whether the
-SGPV is 0, 1, or inconclusive. As already mentioned, this interpretation
-of a SGPV is very similar to the Neyman-Pearson interpretation of an
-equivalence test and a minimum effect tests (which are complementary).
-The difference is that where a SGPV of 1 can be interpreted as \emph{p}
-\textless{} .025, equivalence tests provide exact \emph{p}-values, and
-they continue to differentiate between for example \emph{p} = 0.048 and
-\emph{p} = 0.002. Whether this is desirable depends on the perspective
-that is used. From a Neyman-Pearson perspective on statistical
-inferences the main conclusion is based on whether or not
-\(p < \alpha\), and thus an equivalence test and SGPV can be performed
-by simply checking whether the confidence interval falls within the
-equivalence range, just as a null-hypothesis test can be performed by
-checking whether the confidence interval contains zero or not. At the
-same time, it is recommended to report exact \emph{p}-values (American
-Psychological Association, 2010), and exact \emph{p}-values might
-provide information of interest to readers about how precisely how
+weaknesses. Here, we aimed to compare the SGPV against equivalence tests
+based on the TOST procedure. First of all, even though a SGPV of 1 or 0
+has a clear interpretation (we can reject effects outside or inside the
+equivalence range), intermediate values are not as easy to interpret
+(especially for effects that have asymmetric confidence intervals). In
+one sense, they are what they are (the proportion of overlap), but it
+can be unclear what this number tells us about the data we have
+collected. This is not too problematic, since the main use of the SGPV
+(e.g., in all examples provided by Blume and colleagues) seems to be to
+examine whether the SGPV is 0, 1, or inconclusive. As already mentioned,
+this interpretation of a SGPV is very similar to the Neyman-Pearson
+interpretation of an equivalence test and a minimum effect tests (which
+are complementary). The difference is that where a SGPV of 1 can be
+interpreted as \emph{p} \textless{} .025, equivalence tests provide
+exact \emph{p}-values, and they continue to differentiate between for
+example \emph{p} = 0.024 and \emph{p} = 0.002. Whether this is desirable
+depends on the perspective that is used. From a Neyman-Pearson
+perspective on statistical inferences the main conclusion is based on
+whether or not \(p < \alpha\), and thus an equivalence test and SGPV can
+be performed by simply checking whether the confidence interval falls
+within the equivalence range, just as a null-hypothesis test can be
+performed by checking whether the confidence interval contains zero or
+not. At the same time, it is recommended to report exact \emph{p}-values
+(American Psychological Association, 2010), and exact \emph{p}-values
+might provide information of interest to readers about how precisely how
 surprising the data, or more extreme data, is under the null model. Some
 researchers might be interested in combining an equivalence tests with a
 null-hypothesis significance test. This allows a researcher to ask
@@ -674,9 +683,9 @@ correction to prevent misleading results.
 \centering
 \includegraphics{manuscript.R1_files/figure-latex/TOSTSGPV13-1.pdf}
 \caption{\label{fig:TOSTSGPV13}Comparison of \emph{p}-values from TOST
-(black line) and 1-SGPV (dotted grey curve) across a range of observed
-sample correlations (x-axis) tested against equivalence bounds of r =
-0.4 and r = 0.8 with n = 10 and an alpha of 0.05.}
+(black line) and 1-SGPV (grey curve) across a range of observed sample
+correlations (x-axis) tested against equivalence bounds of \emph{r} =
+0.4 and \emph{r} = 0.8 with n = 10 and an alpha of 0.05.}
 \end{figure}
 
 As a more extreme example of the peculiar behavior of the \enquote{small
@@ -692,18 +701,19 @@ improved. If, on the other hand, the SGPV is mainly meant to be
 interpreted when it is 0 or 1, it might be preferable to simply never
 apply the \enquote{small sample correction}.
 
-Blume et al. (2018) claim that \enquote{Adjustments for multiple
-comparisons are obviated} (p.~15). However, this is not correct. Given
-the direct relationship between TOST and SGPV highlighted in this
-manuscript (where to TOST \emph{p} = 0.025 equals SGPV = 1, as long as
-the SGPV is calculated based on confidence intervals, and assuming data
-sampled from a continuous bivariate normal distribution), not correcting
-for multiple comparisons will inflate the probability of concluding the
-absence of a meaningful effect based on the SGPV in exactly the same way
-as for equivalence tests. Whenever statistical tests are interpreted as
-support for a hypothesis (e.g., SPGV = 0 or SGPV =1), it is possible do
-so erroneously, and if researchers want to control error rates, they
-need to correct for multiple comparisons.
+Blume et al. (2018) claim that when using the SGPV \enquote{Adjustments
+for multiple comparisons are obviated} (p.~15). However, this is not
+correct. Given the direct relationship between TOST and SGPV highlighted
+in this manuscript (where a TOST \emph{p} = 0.025 equals SGPV = 1, as
+long as the SGPV is calculated based on confidence intervals, and
+assuming data are sampled from a continuous bivariate normal
+distribution), not correcting for multiple comparisons will inflate the
+probability of concluding the absence of a meaningful effect based on
+the SGPV in exactly the same way as it will for equivalence tests.
+Whenever statistical tests are interpreted as support for a hypothesis
+(e.g., SPGV = 0 or SGPV = 1), it is possible do so erroneously, and if
+researchers want to control error rates, they need to correct for
+multiple comparisons.
 
 \section{Conclusion}\label{conclusion}
 
