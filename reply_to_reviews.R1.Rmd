@@ -18,7 +18,7 @@ affiliation:
     institution   : "Service of Analysis of the Data, Université Libre de Bruxelles, Belgium"
 
 abstract: |
-  We respond to all the comments on our submission that were raised by the two reviewers, as well as the comments you highlighted as editor. We would like to thank you and reviewers for suggestions for improvements, which we believe made our main argument much clearer, focussed, and formally correct. We feel we were able to accomodate all suggestions, and we hope you think our submission is ready to be accepted for publication in Meta-Psychology. 
+  We respond to all the comments on our submission that were raised by the two reviewers, as well as the comments you highlighted as editor. We would like to thank you and reviewers for suggestions for improvements, which we believe made our main argument much clearer, focussed, and formally correct. We feel we were able to accomodate all suggestions, and we hope you think our submission is ready to be accepted for publication in Meta-Psychology. All code associated with this article, including the reproducible manuscript, is available from https://github.com/Lakens/TOST_vs_SGPV and https://osf.io/8crkg/. The preprint can be found at https://psyarxiv.com/7k6ay/.
 
 bibliography      : ["TOST_vs_SGPV.bib"]
 

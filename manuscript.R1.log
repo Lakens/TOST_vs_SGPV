@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6100 64-bit) (preloaded format=pdflatex 2016.12.15)  10 MAR 2019 10:13
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6100 64-bit) (preloaded format=pdflatex 2016.12.15)  10 MAR 2019 10:26
 entering extended mode
 **./manuscript.R1.tex
 (manuscript.R1.tex
@@ -992,30 +992,30 @@ Package csquotes Info: ... none found.
 (manuscript.R1.aux)
 \openout1 = `manuscript.R1.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 138.
-LaTeX Font Info:    ... okay on input line 138.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 138.
-LaTeX Font Info:    ... okay on input line 138.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 138.
-LaTeX Font Info:    ... okay on input line 138.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 138.
-LaTeX Font Info:    ... okay on input line 138.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 138.
-LaTeX Font Info:    ... okay on input line 138.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 138.
-LaTeX Font Info:    ... okay on input line 138.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 138.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 138.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 140.
+LaTeX Font Info:    ... okay on input line 140.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 140.
+LaTeX Font Info:    ... okay on input line 140.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 140.
+LaTeX Font Info:    ... okay on input line 140.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 140.
+LaTeX Font Info:    ... okay on input line 140.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 140.
+LaTeX Font Info:    ... okay on input line 140.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 140.
+LaTeX Font Info:    ... okay on input line 140.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 140.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 140.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\ts1cmr.fd"
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 138.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 138.
-LaTeX Font Info:    ... okay on input line 138.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 138.
-LaTeX Font Info:    ... okay on input line 138.
-LaTeX Font Info:    Try loading font information for T1+lmr on input line 138.
+LaTeX Font Info:    ... okay on input line 140.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 140.
+LaTeX Font Info:    ... okay on input line 140.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 140.
+LaTeX Font Info:    ... okay on input line 140.
+LaTeX Font Info:    Try loading font information for T1+lmr on input line 140.
 ("C:\Program Files\MiKTeX 2.9\tex\latex\lm\t1lmr.fd"
 File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
@@ -1090,7 +1090,7 @@ Package caption Info: longtable package is loaded.
 Package: ltcaption 2013/06/09 v1.4-94 longtable captions (AR)
 )
 Package caption Info: End \AtBeginDocument code.
-LaTeX Info: Redefining \microtypecontext on input line 138.
+LaTeX Info: Redefining \microtypecontext on input line 140.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using protrusion set `basicmath'.
@@ -1105,7 +1105,7 @@ File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman
 (RS)
 )
 \AtBeginShipoutBox=\box38
-Package hyperref Info: Link coloring OFF on input line 138.
+Package hyperref Info: Link coloring OFF on input line 140.
 ("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\nameref.sty"
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 ("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\gettitlestring.sty"
@@ -1113,51 +1113,51 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count155
 )
-LaTeX Info: Redefining \ref on input line 138.
-LaTeX Info: Redefining \pageref on input line 138.
-LaTeX Info: Redefining \nameref on input line 138.
+LaTeX Info: Redefining \ref on input line 140.
+LaTeX Info: Redefining \pageref on input line 140.
+LaTeX Info: Redefining \nameref on input line 140.
 (manuscript.R1.out) (manuscript.R1.out)
 \@outlinefile=\write5
 \openout5 = `manuscript.R1.out'.
 
-LaTeX Font Info:    Try loading font information for T1+lmss on input line 140.
+LaTeX Font Info:    Try loading font information for T1+lmss on input line 142.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\lm\t1lmss.fd"
 File: t1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OT1+lmr on input line 140.
+LaTeX Font Info:    Try loading font information for OT1+lmr on input line 142.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\lm\ot1lmr.fd"
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OML+lmm on input line 140.
+LaTeX Font Info:    Try loading font information for OML+lmm on input line 142.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\lm\omllmm.fd"
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 140
+LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 142
 .
 ("C:\Program Files\MiKTeX 2.9\tex\latex\lm\omslmsy.fd"
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMX+lmex on input line 140
+LaTeX Font Info:    Try loading font information for OMX+lmex on input line 142
 .
 ("C:\Program Files\MiKTeX 2.9\tex\latex\lm\omxlmex.fd"
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 140.
+(Font)              <12> on input line 142.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 140.
+(Font)              <8> on input line 142.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 140.
-LaTeX Font Info:    Try loading font information for U+msa on input line 140.
+(Font)              <6> on input line 142.
+LaTeX Font Info:    Try loading font information for U+msa on input line 142.
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 ) (C:\Users\Daniel\AppData\Roaming\MiKTeX\2.9\tex\latex\microtype\mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 140.
+LaTeX Font Info:    Try loading font information for U+msb on input line 142.
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) (C:\Users\Daniel\AppData\Roaming\MiKTeX\2.9\tex\latex\microtype\mt-msb.cfg
@@ -1167,97 +1167,97 @@ File: mt-eur.cfg 2006/07/31 v1.1 microtype config. file: AMS Euler Roman (RS)
 ) [1{C:/Users/Daniel/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}
 
 ] [2]
-LaTeX Font Info:    Try loading font information for TS1+lmr on input line 151.
+LaTeX Font Info:    Try loading font information for TS1+lmr on input line 153.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\lm\ts1lmr.fd"
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 ) [3] [4]
-<manuscript.R1_files/figure-latex/TOSTSGPV1-1.pdf, id=73, 469.755pt x 325.215pt
+<manuscript.R1_files/figure-latex/TOSTSGPV1-1.pdf, id=75, 469.755pt x 325.215pt
 >
 File: manuscript.R1_files/figure-latex/TOSTSGPV1-1.pdf Graphic file (type pdf)
 <use manuscript.R1_files/figure-latex/TOSTSGPV1-1.pdf>
 Package pdftex.def Info: manuscript.R1_files/figure-latex/TOSTSGPV1-1.pdf used 
-on input line 230.
+on input line 232.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
 Underfull \vbox (badness 4752) has occurred while \output is active []
 
 [5]
-<manuscript.R1_files/figure-latex/TOSTSGPV2-1.pdf, id=83, 469.755pt x 325.215pt
+<manuscript.R1_files/figure-latex/TOSTSGPV2-1.pdf, id=85, 469.755pt x 325.215pt
 >
 File: manuscript.R1_files/figure-latex/TOSTSGPV2-1.pdf Graphic file (type pdf)
 <use manuscript.R1_files/figure-latex/TOSTSGPV2-1.pdf>
 Package pdftex.def Info: manuscript.R1_files/figure-latex/TOSTSGPV2-1.pdf used 
-on input line 266.
+on input line 268.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [6 <./manuscript.R1_files/figure-latex/TOSTSGPV1-1.pdf>] [7 <./manuscript.R1_fi
 les/figure-latex/TOSTSGPV2-1.pdf>]
-<manuscript.R1_files/figure-latex/TOSTSGPV3-1.pdf, id=106, 469.755pt x 325.215p
+<manuscript.R1_files/figure-latex/TOSTSGPV3-1.pdf, id=108, 469.755pt x 325.215p
 t>
 File: manuscript.R1_files/figure-latex/TOSTSGPV3-1.pdf Graphic file (type pdf)
 <use manuscript.R1_files/figure-latex/TOSTSGPV3-1.pdf>
 Package pdftex.def Info: manuscript.R1_files/figure-latex/TOSTSGPV3-1.pdf used 
-on input line 304.
+on input line 306.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [8 <./manuscript.R1_files/figure-latex/TOSTSGPV3-1.pdf>]
-<manuscript.R1_files/figure-latex/TOSTSGPV4-1.pdf, id=119, 469.755pt x 325.215p
+<manuscript.R1_files/figure-latex/TOSTSGPV4-1.pdf, id=121, 469.755pt x 325.215p
 t>
 File: manuscript.R1_files/figure-latex/TOSTSGPV4-1.pdf Graphic file (type pdf)
 <use manuscript.R1_files/figure-latex/TOSTSGPV4-1.pdf>
 Package pdftex.def Info: manuscript.R1_files/figure-latex/TOSTSGPV4-1.pdf used 
-on input line 339.
+on input line 341.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [9] [10 <./manuscript.R1_files/figure-latex/TOSTSGPV4-1.pdf>]
-<manuscript.R1_files/figure-latex/TOSTSGPV5-1.pdf, id=137, 469.755pt x 325.215p
+<manuscript.R1_files/figure-latex/TOSTSGPV5-1.pdf, id=139, 469.755pt x 325.215p
 t>
 File: manuscript.R1_files/figure-latex/TOSTSGPV5-1.pdf Graphic file (type pdf)
 <use manuscript.R1_files/figure-latex/TOSTSGPV5-1.pdf>
 Package pdftex.def Info: manuscript.R1_files/figure-latex/TOSTSGPV5-1.pdf used 
-on input line 386.
+on input line 388.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [11 <./manuscript.R1_files/figure-latex/TOSTSGPV5-1.pdf>]
-<manuscript.R1_files/figure-latex/TOSTSGPV6-1.pdf, id=149, 469.755pt x 325.215p
+<manuscript.R1_files/figure-latex/TOSTSGPV6-1.pdf, id=151, 469.755pt x 325.215p
 t>
 File: manuscript.R1_files/figure-latex/TOSTSGPV6-1.pdf Graphic file (type pdf)
 <use manuscript.R1_files/figure-latex/TOSTSGPV6-1.pdf>
 Package pdftex.def Info: manuscript.R1_files/figure-latex/TOSTSGPV6-1.pdf used 
-on input line 415.
+on input line 417.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-<manuscript.R1_files/figure-latex/TOSTSGPV7-1.pdf, id=152, 469.755pt x 325.215p
+<manuscript.R1_files/figure-latex/TOSTSGPV7-1.pdf, id=154, 469.755pt x 325.215p
 t>
 File: manuscript.R1_files/figure-latex/TOSTSGPV7-1.pdf Graphic file (type pdf)
 <use manuscript.R1_files/figure-latex/TOSTSGPV7-1.pdf>
 Package pdftex.def Info: manuscript.R1_files/figure-latex/TOSTSGPV7-1.pdf used 
-on input line 447.
+on input line 449.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [12]
-<manuscript.R1_files/figure-latex/TOSTSGPV8-1.pdf, id=161, 469.755pt x 325.215p
+<manuscript.R1_files/figure-latex/TOSTSGPV8-1.pdf, id=163, 469.755pt x 325.215p
 t>
 File: manuscript.R1_files/figure-latex/TOSTSGPV8-1.pdf Graphic file (type pdf)
 <use manuscript.R1_files/figure-latex/TOSTSGPV8-1.pdf>
 Package pdftex.def Info: manuscript.R1_files/figure-latex/TOSTSGPV8-1.pdf used 
-on input line 466.
+on input line 468.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [13 <./manuscript.R1_files/figure-latex/TOSTSGPV6-1.pdf>]
-<manuscript.R1_files/figure-latex/TOSTSGPV9-1.pdf, id=174, 469.755pt x 325.215p
+<manuscript.R1_files/figure-latex/TOSTSGPV9-1.pdf, id=176, 469.755pt x 325.215p
 t>
 File: manuscript.R1_files/figure-latex/TOSTSGPV9-1.pdf Graphic file (type pdf)
 <use manuscript.R1_files/figure-latex/TOSTSGPV9-1.pdf>
 Package pdftex.def Info: manuscript.R1_files/figure-latex/TOSTSGPV9-1.pdf used 
-on input line 484.
+on input line 486.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-<manuscript.R1_files/figure-latex/TOSTSGPV10-1.pdf, id=177, 469.755pt x 325.215
+<manuscript.R1_files/figure-latex/TOSTSGPV10-1.pdf, id=179, 469.755pt x 325.215
 pt>
 File: manuscript.R1_files/figure-latex/TOSTSGPV10-1.pdf Graphic file (type pdf)
 
 <use manuscript.R1_files/figure-latex/TOSTSGPV10-1.pdf>
 Package pdftex.def Info: manuscript.R1_files/figure-latex/TOSTSGPV10-1.pdf used
- on input line 501.
+ on input line 503.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -1268,22 +1268,22 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [16 <./manuscript.R1_files/figure-latex/TOSTSGPV9-1.pdf>] [17 <./manuscript.R1_
 files/figure-latex/TOSTSGPV10-1.pdf>]
-<manuscript.R1_files/figure-latex/TOSTSGPV11-1.pdf, id=220, 469.755pt x 325.215
+<manuscript.R1_files/figure-latex/TOSTSGPV11-1.pdf, id=222, 469.755pt x 325.215
 pt>
 File: manuscript.R1_files/figure-latex/TOSTSGPV11-1.pdf Graphic file (type pdf)
 
 <use manuscript.R1_files/figure-latex/TOSTSGPV11-1.pdf>
 Package pdftex.def Info: manuscript.R1_files/figure-latex/TOSTSGPV11-1.pdf used
- on input line 552.
+ on input line 554.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [18 <./manuscript.R1_files/figure-latex/TOSTSGPV11-1.pdf>]
-<manuscript.R1_files/figure-latex/TOSTSGPV12-1.pdf, id=231, 469.755pt x 325.215
+<manuscript.R1_files/figure-latex/TOSTSGPV12-1.pdf, id=233, 469.755pt x 325.215
 pt>
 File: manuscript.R1_files/figure-latex/TOSTSGPV12-1.pdf Graphic file (type pdf)
 
 <use manuscript.R1_files/figure-latex/TOSTSGPV12-1.pdf>
 Package pdftex.def Info: manuscript.R1_files/figure-latex/TOSTSGPV12-1.pdf used
- on input line 578.
+ on input line 580.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [19 <./manuscript.R1_files/figure-latex/TOSTSGPV12-1.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -1292,31 +1292,31 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 4954) has occurred while \output is active []
 
 [21]
-<manuscript.R1_files/figure-latex/TOSTSGPV13-1.pdf, id=252, 469.755pt x 325.215
+<manuscript.R1_files/figure-latex/TOSTSGPV13-1.pdf, id=254, 469.755pt x 325.215
 pt>
 File: manuscript.R1_files/figure-latex/TOSTSGPV13-1.pdf Graphic file (type pdf)
 
 <use manuscript.R1_files/figure-latex/TOSTSGPV13-1.pdf>
 Package pdftex.def Info: manuscript.R1_files/figure-latex/TOSTSGPV13-1.pdf used
- on input line 684.
+ on input line 686.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
 Underfull \vbox (badness 4752) has occurred while \output is active []
 
 [22] [23 <./manuscript.R1_files/figure-latex/TOSTSGPV13-1.pdf>] [24] [25] AED e
 ndfloat: Processing end Figures and Tables [26]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 831.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 831.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 833.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 833.
 (manuscript.R1.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 831.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 831.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 833.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 833.
 Package rerunfilecheck Info: File `manuscript.R1.out' has not changed.
 (rerunfilecheck)             Checksum: 9F1BEA135F00BD78BF9CC0EE28F8D83C;2940.
  ) 
 Here is how much of TeX's memory you used:
  15818 strings out of 493333
  234881 string characters out of 3139190
- 350996 words of memory out of 3000000
+ 351086 words of memory out of 3000000
  18914 multiletter control sequences out of 15000+200000
  57594 words of font info for 101 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1334,9 +1334,9 @@ e1/public/lm/lmr12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmr8.
 pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmri12.pfb><C:/Program F
 iles/MiKTeX 2.9/fonts/type1/public/lm/lmss8.pfb><C:/Program Files/MiKTeX 2.9/fo
 nts/type1/public/lm/lmsy10.pfb>
-Output written on manuscript.R1.pdf (26 pages, 349281 bytes).
+Output written on manuscript.R1.pdf (26 pages, 349792 bytes).
 PDF statistics:
- 364 PDF objects out of 1000 (max. 8388607)
+ 366 PDF objects out of 1000 (max. 8388607)
  65 named destinations out of 1000 (max. 500000)
  6282 words of extra memory for PDF output out of 10000 (max. 10000000)
 
