@@ -1,0 +1,18 @@
+\begin{longtable}[]{@{}l@{}}
+\toprule
+\endhead
+\begin{minipage}[t]{0.31\columnwidth}\raggedright
+If the observed correlation falls exactly on the equivalence bound the \emph{p}-value for the equivalence test is 0.5. In the equivalence test for correlations the \emph{p} value is computed based on a z-transformation which better controls error rates (Goertzen \& Cribbie, 2010). This transformation is computed as follows, where \emph{r} is the observed correlation and \(\rho\) is the theoretical correlation under the null:\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.31\columnwidth}\raggedright
+\[
+z = \frac{\frac{\log(\frac{1 + r}{ 1 - r})}{2} - \frac{\log(\frac{1 + \rho}{ 1 - \rho})}{2}}{\sqrt{\frac{1}{n-3}}}
+\]\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.31\columnwidth}\raggedright
+Because the z-distribution is symmetric, the probability of observing the observed or more extreme z-score, assuming the equivalence bound is the true effect size, is 50\%. However, because the \emph{r} distribution is not symmetric, this does not mean that there is always a 50\% probability of observing a correlation smaller or larger than the true correlation.\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+\efloatseparator
+ 

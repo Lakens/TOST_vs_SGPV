@@ -1,0 +1,102 @@
+---
+title             : "Reply to Reviews"
+shorttitle        : "Reply R2"
+
+author:
+  - name          : "Dani&euml;l Lakens"
+    affiliation   : "1"
+    corresponding : yes
+    address       : "Den Dolech 1, IPO 1.33, 5600 MB, Eindhoven, The Netherlands"
+    email         : "D.Lakens@tue.nl"
+  - name          : "Marie Delacre"
+    affiliation   : "2"
+
+affiliation:
+  - id            : "1"
+    institution   : "Eindhoven University of Technology, Eindhoven, The Netherlands"
+  - id            : "2"
+    institution   : "Service of Analysis of the Data, Université Libre de Bruxelles, Belgium"
+
+abstract: |
+  In this second revision we are responding to the last issue you raised, about our incorrect statement that 50% of the correlations fall below the observed correlation. We are extrmely grateful you pointed out this incorrect statement, and have corrected it as explained below. We hope you think our submission is ready to be accepted for publication in Meta-Psychology.
+
+bibliography      : ["TOST_vs_SGPV.bib"]
+
+floatsintext      : no
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+linenumbers       : yes
+mask              : no
+draft             : no
+
+documentclass     : "apa6"
+classoption       : "man"
+output            : papaja::apa6_pdf
+---
+
+
+```{r include = FALSE}
+library("TOSTER")
+library("papaja")
+```
+```{r, include=FALSE}
+source("functions/TOST_to_SGPV.R")
+source("functions/p_delta_function.R")
+```
+
+**Dear editor,** 
+
+**thank you for your comments on our revised manuscript. You rightly noted that our statement that "There is always a 50% probability of observing a correlation smaller or larger than the true correlation" was not correct. Our statement was true for the corresponding z-value when transforming the correlation while calculating confidence intervals, but not for correlations, which are not symmetrically distributed. We have deleted the following:**
+
+> *In other words, if the true effect size is the same as the equivalence bound, it is equally likely to find an effect more extreme than the equivalence bound, as it is to observe an effect that is less extreme than the equivalence bound.*
+
+**We have made a number of small changes. First, we clearly explain that, although the z-distribution is symmetrical, the correlation is not. We note how the transformation has the goal to yield accurate error rates (which is important in the TOST procedure) on page 18, lines 250-255.**
+
+-------------------------------------------------------------------------------
+
+If the observed correlation falls exactly on the equivalence bound the *p*-value for the equivalence test is 0.5. In the equivalence test for correlations the *p* value is computed based on a z-transformation which better controls error rates [@goertzen_detecting_2010]. This transformation is computed as follows, where  *r* is the observed correlation and $\rho$ is the theoretical correlation under the null: 
+
+$$
+z = \frac{\frac{\log(\frac{1 + r}{ 1 - r})}{2} - \frac{\log(\frac{1 + \rho}{ 1 - \rho})}{2}}{\sqrt{\frac{1}{n-3}}}
+$$
+
+Because the z-distribution is symmetric, the probability of observing the observed or more extreme z-score, assuming the equivalence bound is the true effect size, is 50%. However, because the *r* distribution is not symmetric, this does not mean that there is always a 50% probability of observing a correlation smaller or larger than the true correlation. 
+
+-------------------------------------------------------------------------------
+
+**Second, we have added an explicit statement that in the extreme case, the probability of observing a correlation smaller than the equivalence bound is not 50%, but in our example, 36% on page 19, lines 271-275.**
+
+```{r, include=FALSE}
+low_eqbound_r = -0.99
+high_eqbound_r = 0.99
+res_2<-TOSTr(n = 4,
+           r = 0.99,
+           low_eqbound_r = low_eqbound_r,
+           high_eqbound_r = high_eqbound_r,
+           alpha = .05,
+           plot = FALSE,
+           verbose = FALSE)
+sgpv2 <- p_delta(res_2$LL_CI_TTEST,res_2$UL_CI_TTEST, low_eqbound_r, high_eqbound_r)
+
+```
+
+-------------------------------------------------------------------------------
+
+In the most extreme case (i.e., a sample size of 4, and equivalence bounds set to *r* = -0.99 and 0.99, with a true correlation of 0.99) `r round(sgpv2,3)*100`% of the confidence interval overlaps with the equivalence range, even though in the long run only 36% of the correlations observed in the future will fall in this range.
+
+-------------------------------------------------------------------------------
+
+**We again want to sincerely thank you for catching this error before our paper was publlished.**
+
+
+\newpage
+
+# References
+
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+
+<div id = "refs"></div>
+\endgroup

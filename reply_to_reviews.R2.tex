@@ -1,0 +1,164 @@
+\documentclass[man]{apa6}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Reply to Reviews},
+            pdfauthor={Daniël Lakens~\& Marie Delacre},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+
+  \title{Reply to Reviews}
+    \author{Daniël Lakens\textsuperscript{1}~\& Marie Delacre\textsuperscript{2}}
+    \date{}
+  
+\shorttitle{Reply R2}
+\affiliation{
+\vspace{0.5cm}
+\textsuperscript{1} Eindhoven University of Technology, Eindhoven, The Netherlands\\\textsuperscript{2} Service of Analysis of the Data, Université Libre de Bruxelles, Belgium}
+\usepackage{csquotes}
+\usepackage{upgreek}
+\captionsetup{font=singlespacing,justification=justified}
+
+\usepackage{longtable}
+\usepackage{lscape}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage[flushleft]{threeparttable}
+\usepackage{threeparttablex}
+
+\newenvironment{lltable}{\begin{landscape}\begin{center}\begin{ThreePartTable}}{\end{ThreePartTable}\end{center}\end{landscape}}
+
+\makeatletter
+\newcommand\LastLTentrywidth{1em}
+\newlength\longtablewidth
+\setlength{\longtablewidth}{1in}
+\newcommand{\getlongtablewidth}{\begingroup \ifcsname LT@\roman{LT@tables}\endcsname \global\longtablewidth=0pt \renewcommand{\LT@entry}[2]{\global\advance\longtablewidth by ##2\relax\gdef\LastLTentrywidth{##2}}\@nameuse{LT@\roman{LT@tables}} \fi \endgroup}
+
+
+\DeclareDelayedFloatFlavor{ThreePartTable}{table}
+\DeclareDelayedFloatFlavor{lltable}{table}
+\DeclareDelayedFloatFlavor*{longtable}{table}
+\makeatletter
+\renewcommand{\efloat@iwrite}[1]{\immediate\expandafter\protected@write\csname efloat@post#1\endcsname{}}
+\makeatother
+\usepackage{lineno}
+
+\linenumbers
+
+\authornote{
+
+Correspondence concerning this article should be addressed to Daniël Lakens, Den Dolech 1, IPO 1.33, 5600 MB, Eindhoven, The Netherlands. E-mail: \href{mailto:D.Lakens@tue.nl}{\nolinkurl{D.Lakens@tue.nl}}}
+
+\abstract{
+In this second revision we are responding to the last issue you raised, about our incorrect statement that 50\% of the correlations fall below the observed correlation. We are extrmely grateful you pointed out this incorrect statement, and have corrected it as explained below. We hope you think our submission is ready to be accepted for publication in Meta-Psychology.
+
+
+}
+
+\begin{document}
+\maketitle
+
+\textbf{Dear editor,}
+
+\textbf{thank you for your comments on our revised manuscript. You rightly noted that our statement that \enquote{There is always a 50\% probability of observing a correlation smaller or larger than the true correlation} was not correct. Our statement was true for the corresponding z-value when transforming the correlation while calculating confidence intervals, but not for correlations, which are not symmetrically distributed. We have deleted the following:}
+
+\begin{quote}
+\emph{In other words, if the true effect size is the same as the equivalence bound, it is equally likely to find an effect more extreme than the equivalence bound, as it is to observe an effect that is less extreme than the equivalence bound.}
+\end{quote}
+
+\textbf{We have made a number of small changes. First, we clearly explain that, although the z-distribution is symmetrical, the correlation is not. We note how the transformation has the goal to yield accurate error rates (which is important in the TOST procedure) on page 18, lines 250-255.}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+If the observed correlation falls exactly on the equivalence bound the \emph{p}-value for the equivalence test is 0.5. In the equivalence test for correlations the \emph{p} value is computed based on a z-transformation which better controls error rates (Goertzen \& Cribbie, 2010). This transformation is computed as follows, where \emph{r} is the observed correlation and \(\rho\) is the theoretical correlation under the null:
+
+\[
+z = \frac{\frac{\log(\frac{1 + r}{ 1 - r})}{2} - \frac{\log(\frac{1 + \rho}{ 1 - \rho})}{2}}{\sqrt{\frac{1}{n-3}}}
+\]
+
+Because the z-distribution is symmetric, the probability of observing the observed or more extreme z-score, assuming the equivalence bound is the true effect size, is 50\%. However, because the \emph{r} distribution is not symmetric, this does not mean that there is always a 50\% probability of observing a correlation smaller or larger than the true correlation.
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\textbf{Second, we have added an explicit statement that in the extreme case, the probability of observing a correlation smaller than the equivalence bound is not 50\%, but in our example, 36\% on page 19, lines 271-275.}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+In the most extreme case (i.e., a sample size of 4, and equivalence bounds set to \emph{r} = -0.99 and 0.99, with a true correlation of 0.99) 97.60\% of the confidence interval overlaps with the equivalence range, even though in the long run only 36\% of the correlations observed in the future will fall in this range.
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\textbf{We again want to sincerely thank you for catching this error before our paper was publlished.}
+
+\newpage
+
+\hypertarget{references}{%
+\section{References}\label{references}}
+
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+
+\hypertarget{refs}{}
+\leavevmode\hypertarget{ref-goertzen_detecting_2010}{}%
+Goertzen, J. R., \& Cribbie, R. A. (2010). Detecting a lack of association: An equivalence testing approach. \emph{British Journal of Mathematical and Statistical Psychology}, \emph{63}(3), 527--537. doi:\href{https://doi.org/10.1348/000711009X475853}{10.1348/000711009X475853}
+
+\endgroup
+
+
+\end{document}
