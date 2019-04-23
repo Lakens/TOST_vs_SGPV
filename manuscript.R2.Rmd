@@ -679,7 +679,19 @@ abline(h = 0.5,
 
 ```
 
-We can examine this situation by calculating the SGPV and performing the TOST for a situation where sample sizes are small and the equivalence range is narrow, such that the CI is more than twice as large as the equivalence range (see Figure \ref{fig:TOSTSGPV6}). When the two statistics are plotted against each other we can see where the SGPV is the same while the TOST *p*-value still differentiates different observed means (indicated by straight lines in the curve, see Figure \ref{fig:TOSTSGPV7}). We see the SGPV is 0.5 for a range of observed means where the *p*-value from the equivalence test still varies. It should be noted that in these calculations the *p*-values for the TOST procedure are *never* smaller than 0.05 (i.e., they do not get below 0.05 on the y-axis). In other words, we cannot conclude equivalence based on any of the observed means. This happens because the we are examining a scenario where the 90% CI is so wide that it never falls completely within the two equivalence bounds. As @lakens_equivalence_2017 notes: “in small samples (where CIs are wide), a study might have no statistical power (i.e., the CI will always be so wide that it is necessarily wider than the equivalence bounds).” None of the *p*-values based on the TOST procedure are below 0.05, and thus, in the long run we have 0% power.
+We can examine this situation by calculating the SGPV and performing the TOST for a situation where sample sizes are small and the equivalence range is narrow, such that the CI is more than twice as large as the equivalence range (see Figure \ref{fig:TOSTSGPV6}). When the two statistics are plotted against each other we can see where the SGPV is the same while the TOST *p*-value still differentiates different observed means (indicated by straight lines in the curve, see Figure \ref{fig:TOSTSGPV7}). We see the SGPV is 0.5 for a range of observed means where the *p*-value from the equivalence test still varies. It should be noted that in these calculations the *p*-values for the TOST procedure are *never* smaller than 0.05 (i.e., they do not get below 0.05 on the y-axis). In other words, we cannot conclude equivalence based on any of the observed means. This happens because we are examining a scenario where the 90% CI is so wide that it never falls completely within the two equivalence bounds.  
+
+```{r, include=FALSE}
+pt.est <- function(n,m,mu,sd){
+  x <- rnorm(n,m,sd)
+  res <- TOSTone.raw(m=mean(x),mu=mu,sd=sd(x),n=n, low_eqbound=mu-.4, high_eqbound=mu+.4,verbose=FALSE,plot=FALSE)
+  pval <- max(res$TOST_p1,res$TOST_p2)  
+}
+
+pt.sampling.dist <- replicate(10000,(pt.est(n=10,m=0,mu=0,sd=2)))
+```
+
+As @lakens_equivalence_2017 notes: “in small samples (where CIs are wide), a study might have no statistical power (i.e., the CI will always be so wide that it is necessarily wider than the equivalence bounds).” None of the *p*-values based on the TOST procedure are below 0.05, and thus, in the long run we have `r round(sum(pt.sampling.dist<.05)/length(pt.sampling.dist))`% power.
 
 ```{r, TOSTSGPV7, fig.cap="The relationship between *p*-values from the TOST procedure and the SGPV for the same scenario as in Figure \\ref{fig:TOSTSGPV6}."}
 plot(sgpv_list, 
@@ -693,8 +705,6 @@ plot(sgpv_list,
      ylab = "TOST p-value",
      xlab = "SGPV")
 ```
-
-The *p*-value from the TOST procedure still differentiates observed means, while the  SGPV does not, when the CI is wider than the equivalence range (so the precision is low) and overlaps with the upper and lower equivalence bound, but the CI is *not* twice as wide as the equivalence range. In the example below, we see that the CI is only 1.79 times as wide as the equivalence bounds, but the CI overlaps with the lower and upper equivalence bounds (Figure \ref{fig:TOSTSGPV8}). This means the SGPV is not set to 0.5, but it is constant across a range of observed means, while the TOST *p*-value is not constant across this range.
 
 ```{r, include=FALSE}
 m <- 0.2
@@ -713,10 +723,10 @@ tost_res1 <- TOSTone.raw(m = m,
                          plot = F)
 
 #Ratio CI to equivalence bounds
-(tost_res1$UL_CI_TTEST - tost_res1$LL_CI_TTEST) / (d.hi - d.lo)
-
-
+ratio_CI<-(tost_res1$UL_CI_TTEST - tost_res1$LL_CI_TTEST) / (d.hi - d.lo)
 ```
+
+The *p*-value from the TOST procedure still differentiates observed means, while the  SGPV does not, when the CI is wider than the equivalence range (so the precision is low) and overlaps with the upper and lower equivalence bound, but the CI is *not* twice as wide as the equivalence range. In the example below, we see that the CI is only `r round(ratio_CI,2)` times as wide as the equivalence bounds, but the CI overlaps with the lower and upper equivalence bounds (Figure \ref{fig:TOSTSGPV8}). This means the SGPV is not set to 0.5, but it is constant across a range of observed means, while the TOST *p*-value is not constant across this range.
 
 ```{r, TOSTSGPV8, fig.cap="Example of a 95% CI that overlaps with the lower and upper equivalence bound (indicated by the vertical dotted lines)."}
 
@@ -804,7 +814,7 @@ abline(h = 0.5,
        col = "lightgrey")
 ```
 
-If we once more plot the two statistics against each other we see the SGPV is 0.56 for a range of observed means where the *p*-value from the equivalence test still varies, as indicated by the straight section of the line (Figure \ref{fig:TOSTSGPV10}).
+If we once more plot the two statistics against each other we see the SGPV is `r round(max(sgpv_list),2)` for a range of observed means where the *p*-value from the equivalence test still varies, as indicated by the straight section of the line (Figure \ref{fig:TOSTSGPV10}). 
 
 ```{r, TOSTSGPV10, fig.cap="The relationship between *p*-values from the TOST procedure and the SGPV for the same scenario as in Figure \\ref{fig:TOSTSGPV9}."}
 plot(sgpv_list, 
@@ -824,9 +834,29 @@ To conclude this section, there are situations where the *p*-value from the TOST
 
 ## The relation between equivalence tests and SGPV for asymmetrical confidence intervals around correlations
 
-So far we have only looked at the relation between equivalence tests and the SGPV when confidence intervals are symmetric (e.g., for confidence intervals around mean differences). For correlations, which are bound between -1 and 1, confidence intervals are only symmetric for a correlation of exactly 0. The confidence interval for a correlation becomes increasingly asymmetric as the observed correlation nears -1 or 1. For example, with ten observations, an observed correlation of 0 has a symmetric 95% confidence interval ranging from `r round(TOSTr(r = 0, n = 10, low_eqbound_r = -0.45, high_eqbound_r = 0.45, alpha = 0.05, plot = FALSE, verbose = FALSE)$LL_CI_TTEST,3)` to `r round(TOSTr(r = 0, n = 10, low_eqbound_r = -0.45, high_eqbound_r = 0.45, alpha = 0.05, plot = FALSE, verbose = FALSE)$UL_CI_TTEST,3)`, while and observed correlation of 0.7 has an asymmetric 95% confidence interval ranging from `r round(TOSTr(r = 0.7, n = 10, low_eqbound_r = -0.45, high_eqbound_r = 0.45, alpha = 0.05, plot = FALSE, verbose = FALSE)$LL_CI_TTEST,3)` to `r round(TOSTr(r = 0.7, n = 10, low_eqbound_r = -0.45, high_eqbound_r = 0.45, alpha = 0.05, plot = FALSE, verbose = FALSE)$UL_CI_TTEST,3)`. Note that calculating confidence intervals for a correlation involves a Fisher's z-transformation, which transforms values such that they are approximately normally z-distributed, which allows one to compute symmetric confidence intervals. These confidence intervals are then retransformed into a correlation, where the confidence intervals are asymmetric if the correlation is not exactly zero.
+```{r, include=FALSE}
 
-The effect of asymmetric confidence intervals around correlations is most noticeable at smaller sample sizes. In Figure \ref{fig:TOSTSGPV11} we plot the *p*-values from equivalence tests and the SGPV (again plotted as 1-SGPV for ease of comparison) for correlations. The sample size is 30 pairs of observations, and the lower and upper equivalence bounds are set to -0.45 and 0.45, with an alpha of 0.05. As the observed correlation in the sample moves from -1 to 0 the *p*-value from the equivalence test becomes smaller, as does 1-SGPV. The pattern is quite similar to that in Figure \ref{fig:TOSTSGPV2}. The *p*-value for the TOST procedure and 1-SGPV are still related as discussed above, with TOST *p*-values of 0.975 and 0.025 corresponding to a 1-SGPV of 1 and 0, respectively. There are two important differences, however. First of all, the SGPV is no longer a straight line, but a curve, due to the asymmetry in the 95% CI. Second, and most importantly, the *p*-value for the equivalence test and the SGPV do no longer overlap at *p* = 0.5.
+  ## Confidence Interval around r
+  r_CI <- function(r,n){
+    
+  # convert r into z
+  z <- log((1+r)/(1-r))/2
+
+  # computing z bounds 
+  binf_z <- z-qnorm(1-alpha/2)/sqrt(n-3)
+  bsup_z <- z+qnorm(1-alpha/2)/sqrt(n-3)
+            
+  # convert z bounds into r bounds
+  binf <- (exp(2*binf_z)-1)/(1+exp(2*binf_z))
+  bsup <- (exp(2*bsup_z)-1)/(1+exp(2*bsup_z))
+
+  invisible(list(binf=binf,bsup=bsup))  
+  }
+```
+
+So far we have only looked at the relation between equivalence tests and the SGPV when confidence intervals are symmetric (e.g., for confidence intervals around mean differences). For correlations, which are bound between -1 and 1, confidence intervals are only symmetric for a correlation of exactly 0. The confidence interval for a correlation becomes increasingly asymmetric as the observed correlation nears -1 or 1. For example, with ten observations, an observed correlation of 0 has a symmetric 95% confidence interval ranging from `r r_CI(r=0,n=10)$binf` to `r r_CI(r=0,n=10)$bsup`, while and observed correlation of 0.7 has an asymmetric 95% confidence interval ranging from `r r_CI(r=.7,n=10)$binf` to `r r_CI(r=.7,n=10)$bsup`. Note that calculating confidence intervals for a correlation involves a Fisher's z-transformation, which transforms values such that they are approximately normally z-distributed, which allows one to compute symmetric confidence intervals. These confidence intervals are then retransformed into a correlation, where the confidence intervals are asymmetric if the correlation is not exactly zero.
+
+The effect of asymmetric confidence intervals around correlations is most noticeable at smaller sample sizes. In Figure \ref{fig:TOSTSGPV11} we plot the *p*-values from equivalence tests and the SGPV (again plotted as 1-SGPV for ease of comparison) for correlations. The sample size is 30 pairs of observations, and the lower and upper equivalence bounds are set to -0.45 and 0.45, with an alpha of 0.05. As the observed correlation in the sample moves from -.99 to 0 the *p*-value from the equivalence test becomes smaller, as does 1-SGPV. The pattern is quite similar to that in Figure \ref{fig:TOSTSGPV2}. The *p*-value for the TOST procedure and 1-SGPV are still related as discussed above, with TOST *p*-values of 0.975 and 0.025 corresponding to a 1-SGPV of 1 and 0, respectively. There are two important differences, however. First of all, the SGPV is no longer a straight line, but a curve, due to the asymmetry in the 95% CI. Second, and most importantly, the *p*-value for the equivalence test and the SGPV do no longer overlap at *p* = 0.5.
 
 ```{r, include=FALSE}
 n <- 30
@@ -913,7 +943,7 @@ sgpv2 <- p_delta(res_2$LL_CI_TTEST,res_2$UL_CI_TTEST, low_eqbound_r, high_eqboun
 
 ```
 
-The reason that the equivalence test and SGPV no longer overlap is due to asymmetric confidence intervals. If the observed correlation falls exactly on the equivalence bound the *p*-value for the equivalence test is 0.5. In the equivalence test for correlations the *p* value is computed based on a z-transformation which better controls error rates [@goertzen_detecting_2010]. This transformation is computed as follows, where  *r* is the observed correlation and $\rho$ is the theoretical correlation under the null: 
+The reason that the equivalence test and SGPV no longer overlap is due to asymmetric confidence intervals. If the observed correlation falls exactly on the equivalence bound the *p*-value for the equivalence test is 0.5. In the equivalence test for correlations the *p*-value is computed based on a z-transformation which better controls error rates [@goertzen_detecting_2010]. This transformation is computed as follows, where  *r* is the observed correlation and $\rho$ is the theoretical correlation under the null:  
 
 $$
 z = \frac{\frac{\log(\frac{1 + r}{ 1 - r})}{2} - \frac{\log(\frac{1 + \rho}{ 1 - \rho})}{2}}{\sqrt{\frac{1}{n-3}}}
@@ -953,8 +983,22 @@ segments(LL95_r2,0.4,UL95_r2,0.4, lwd=2)
 points(x=r3, y=0.2, pch=15, cex=1.1)
 segments(LL95_r3,0.2,UL95_r3,0.2, lwd=2)
 ```
+ 
+```{r, include=FALSE}
 
-This example illustrates the difference between a proportion and a probability. As long as data are sampled from a bivariate normal distribution, there is always a 50% probability of observing a correlation smaller or larger than the true correlation, but the SGPV for this situation depends on how far away the observed correlation is from 0. The further away from 0, the larger the SGPV when the observed mean falls on the equivalence bound. The SGPV is the proportion of values in a 95% confidence interval that overlap with the equivalence range, but not the probability that these values will be observed. In the most extreme case (i.e., a sample size of 4, and equivalence bounds set to *r* = -0.99 and 0.99, with a true correlation of 0.99) `r round(sgpv2,3)*100`% of the confidence interval overlaps with the equivalence range, even though in the long run only 36% of the correlations observed in the future will fall in this range.
+library(mvtnorm)
+
+r.est <- function(n,r){
+    x <- rmvnorm(n,c(0,0),sigma=matrix(c(1,r,r,1),nrow=2))
+    est <- cor(x)[1,2]
+    est
+}
+
+r.sampling.dist <- replicate(10000,r.est(4,.99))
+prop <- sum(r.sampling.dist <=.99)/length(r.sampling.dist)
+```
+
+The further away from 0, the larger the SGPV when the observed mean falls on the equivalence bound. The SGPV is the proportion of values in a 95% confidence interval that overlap with the equivalence range, but not the probability that these values will be observed. In the most extreme case (i.e., a sample size of 4, and equivalence bounds set to *r* = -0.99 and 0.99, with a true correlation of 0.99) `r round(sgpv2,3)*100`% of the confidence interval overlaps with the equivalence range, even though in the long run only `r prop*100`% of the correlations observed in the future will fall in this range.
 
 It should be noted that in larger sample sizes the SGPV is closer to 0.5 whenever the observed correlation falls on the equivalence bound, but this extreme example nevertheless clearly illustrates the difference between question the SGPV answers, and the question a *p*-value answers. The conclusion of this section on asymmetric confidence intervals is that a SGPV of 1 or 0 can still be interpreted as a *p* < 0.025 or *p* > 0.975 in an equivalence test, since the SGPV and *p*-value for the TOST procedure are always directly related at the values *p* = 0.025 and *p* = 0.975. Although @blume_second-generation_2018 state that "the degree of overlap conveys how compatible the data are with the null premise" this definition of what the SGPV provides does not hold for asymmetric confidence intervals. Although a SGPV of 1 or 0 can be directly interpreted, a SGPV between 0 and 1 is not interpretable as 'compatibility with the null hypothesis' under the assumption of a bivariate normal distribution, and the generalizability of this statement needs to be examined beyond normal bivariate distributions. Indeed, Blume and colleagues write in the supplemental material that "The magnitude of an inconclusive second-generation *p*-value can vary slightly when the effect size scale is transformed. However definitive findings, i.e. a *p*-value of 0 or 1 are *not* affected by the scale changes."
 
@@ -977,7 +1021,7 @@ sgpv
 
 ## What are the Relative Strengths and Weaknesses of Equivalence Testing and the SGPV?
 
-When introducing a new statistical method, it is important to compare it to existing approaches and specify its relative strengths and weaknesses. Here, we aimed to compare the SGPV against equivalence tests based on the TOST procedure. First of all, even though a SGPV of 1 or 0 has a clear interpretation (we can reject effects outside or inside the equivalence range), intermediate values are not as easy to interpret (especially for effects that have asymmetric confidence intervals). In one sense, they are what they are (the proportion of overlap), but it can be unclear what this number tells us about the data we have collected. This is not too problematic, since the main use of the SGPV (e.g., in all examples provided by Blume and colleagues) seems to be to examine whether the SGPV is 0, 1, or inconclusive. As already mentioned, this interpretation of a SGPV is very similar to the Neyman-Pearson interpretation of an equivalence test and a minimum effect tests (which are complementary). The difference is that where a SGPV of 1 can be interpreted as *p* < .025, equivalence tests provide exact *p*-values, and they continue to differentiate between for example *p* = 0.024 and *p* = 0.002. Whether this is desirable depends on the perspective that is used. From a Neyman-Pearson perspective on statistical inferences the main conclusion is based on whether or not $p < \alpha$, and thus an equivalence test and SGPV can be performed by simply checking whether the confidence interval falls within the equivalence range, just as a null-hypothesis test can be performed by checking whether the confidence interval contains zero or not. At the same time, it is recommended to report exact *p*-values [@american_psychological_association_publication_2010], and exact *p*-values might provide information of interest to readers about how precisely how surprising the data, or more extreme data, is under the null model. Some researchers might be interested in combining an equivalence tests with a null-hypothesis significance test. This allows a researcher to ask whether there is an effect that is statistically different from zero, and whether effect sizes that are considered meaningful can be rejected. Equivalence tests combined with null-hypothesis tests classify results into four possible categories, and for example allow researchers to conclude an effect is significant *and* equivalent (i.e., statistically different from zero, but also too small to be considered meaningful, see @lakens_equivalence_2018). 
+When introducing a new statistical method, it is important to compare it to existing approaches and specify its relative strengths and weaknesses. Here, we aimed to compare the SGPV against equivalence tests based on the TOST procedure. First of all, even though a SGPV of 1 or 0 has a clear interpretation (we can reject effects outside or inside the equivalence range), intermediate values are not as easy to interpret (especially for effects that have asymmetric confidence intervals). In one sense, they are what they are (the proportion of overlap), but it can be unclear what this number tells us about the data we have collected. This is not too problematic, since the main use of the SGPV (e.g., in all examples provided by Blume and colleagues) seems to be to examine whether the SGPV is 0, 1, or inconclusive. As already mentioned, this interpretation of a SGPV is very similar to the Neyman-Pearson interpretation of an equivalence test and a minimum effect tests (which are complementary). The difference is that where a SGPV of 1 can be interpreted as *p* < .025, equivalence tests provide exact *p*-values, and they continue to differentiate between for example *p* = 0.024 and *p* = 0.002. Whether this is desirable depends on the perspective that is used. From a Neyman-Pearson perspective on statistical inferences the main conclusion is based on whether or not $p < \alpha$, and thus an equivalence test and SGPV can be performed by simply checking whether the confidence interval falls within the equivalence range, just as a null-hypothesis test can be performed by checking whether the confidence interval contains zero or not. At the same time, it is recommended to report exact *p*-values [@american_psychological_association_publication_2010], and exact *p*-values might provide information of interest to readers about how precisely how surprising the data, or more extreme data, is under the null model. Some researchers might be interested in combining an equivalence test with a null-hypothesis significance test. This allows a researcher to ask whether there is an effect that is statistically different from zero, and whether effect sizes that are considered meaningful can be rejected. Equivalence tests combined with null-hypothesis tests classify results into four possible categories, and for example allow researchers to conclude an effect is significant *and* equivalent (i.e., statistically different from zero, but also too small to be considered meaningful; see @lakens_equivalence_2018). 
 
 An important issue when calculating the SGPV is its reliance on the 'small sample correction', where the SGPV is set to 0.5 whenever the ratio of the confidence interval width to the equivalence range exceeds 2:1 and the CI overlaps with the upper and lower bounds. This exception to the normal calculation of the SGPV is introduced to prevent misleading values. Without this correction it is possible that a confidence interval is extremely wide, and an equivalence range is extremely narrow, which without the correction would lead to a very low value for the SGPV. @blume_second-generation_2018 suggest that under such a scenario 'the data favor alternative hypotheses', even when a better interpretation would be that there is not enough data to accurately estimate the true effect compared to the width of the equivalence range. Although it is necessary to set the SGPV to 0.5 whenever the ratio of the confidence interval width to the equivalence range exceeds 2:1, it leads to a range of situations where the SGPV is set to 0.5, while the *p*-value from the TOST procedure continues to differentiate (see for example Figure \ref{fig:TOSTSGPV6}). An important benefit of equivalence tests is that it does not need such a correction to prevent misleading results.
 
@@ -1040,9 +1084,9 @@ abline(h = c(0.975, 0.5, 0.025),
        col = "grey")
 ```
 
-As a more extreme example of the peculiar behavior of the 'small sample correction' as currently implemented in the calculation of the SGPV see Figure \ref{fig:TOSTSGPV13}. In this figure observed correlations (from a sample size of 10) from -1 to 1 are tested against an equivalence range from r = 0.4 to r = 0.8. We can see the SGPV has a peculiar shape because it is set to 0.5 for certain observed correlations, even though there is no risk of a 'misleading' SGPV in this range. This example suggests that the current implementation of the 'small sample correction' could be improved. If, on the other hand, the SGPV is mainly meant to be interpreted when it is 0 or 1, it might be preferable to simply never apply the 'small sample correction'. 
+As a more extreme example of the peculiar behavior of the 'small sample correction' as currently implemented in the calculation of the SGPV, see Figure \ref{fig:TOSTSGPV13}. In this figure observed correlations (from a sample size of 10) from -.99 to .99 are tested against an equivalence range from r = 0.4 to r = 0.8. We can see the SGPV has a peculiar shape because it is set to 0.5 for certain observed correlations, even though there is no risk of a 'misleading' SGPV in this range. This example suggests that the current implementation of the 'small sample correction' could be improved. If, on the other hand, the SGPV is mainly meant to be interpreted when it is 0 or 1, it might be preferable to simply never apply the 'small sample correction'. 
 
-@blume_second-generation_2018 claim that when using the SGPV "Adjustments for multiple comparisons are obviated" (p. 15). However, this is not correct. Given the direct relationship between TOST and SGPV highlighted in this manuscript (where a TOST *p* = 0.025 equals SGPV = 1, as long as the SGPV is calculated based on confidence intervals, and assuming data are sampled from a continuous bivariate normal distribution), not correcting for multiple comparisons will inflate the probability of concluding the absence of a meaningful effect based on the SGPV in exactly the same way as it will for equivalence tests. Whenever statistical tests are interpreted as support for a hypothesis (e.g., SPGV = 0 or SGPV = 1), it is possible do so erroneously, and if researchers want to control error rates, they need to correct for multiple comparisons.  
+@blume_second-generation_2018 claim that when using the SGPV "Adjustments for multiple comparisons are obviated" (p. 15). However, this is not correct. Given the direct relationship between TOST and SGPV highlighted in this manuscript (where a TOST *p* = 0.025 equals SGPV = 1, as long as the SGPV is calculated based on confidence intervals, and assuming data are sampled from a continuous bivariate normal distribution), not correcting for multiple comparisons will inflate the probability of concluding the absence of a meaningful effect based on the SGPV in exactly the same way as it will for equivalence tests. Whenever statistical tests are interpreted as support for a hypothesis (e.g., SPGV = 0 or SGPV = 1), it is possible to do so erroneously, and if researchers want to control error rates, they need to correct for multiple comparisons.  
 
 # Conclusion
 
