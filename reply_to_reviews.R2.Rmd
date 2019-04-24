@@ -18,7 +18,7 @@ affiliation:
     institution   : "Service of Analysis of the Data, Université Libre de Bruxelles, Belgium"
 
 abstract: |
-  In this second revision we are responding to the last issue you raised, about our incorrect statement that 50% of the correlations fall below the observed correlation. We are extrmely grateful you pointed out this incorrect statement, and have corrected it as explained below. We hope you think our submission is ready to be accepted for publication in Meta-Psychology.
+  In this second revision we are responding to the last issue you raised concerning our incorrect statement that 50% of the expected correlations fall below the observed correlation. We are extremely grateful you pointed out this incorrect statement, and have corrected it as explained below. We have also made some minor changes after carefully re-reading the manuscript that we detail at the end of this letter. We hope you think our submission is ready to be accepted for publication in Meta-Psychology.
 
 bibliography      : ["TOST_vs_SGPV.bib"]
 
@@ -89,6 +89,19 @@ In the most extreme case (i.e., a sample size of 4, and equivalence bounds set t
 
 **We again want to sincerely thank you for catching this error before our paper was publlished.**
 
+# Additional Minor changes
+
+**We replaced some values in the document that were hard-coded with the R scripts that produced these values, making the document (as far as we can see) 100% reproducible. (note that this is not noticeable in the PDF)** 
+
+**We wrote we 'replicated' Blume, but we now say we 'build on' Blume - all our examples use a mean of 145, where upon rereading Blume et al we noticed they use a mean of 146 - an inconsequential difference, but instead of changing all our examples to a mean of 146, we just changed the word 'replicated' to 'build on'.** 
+
+**We removed 'if too few observations are collected' which was redundant with the 'note that when sample sizes are small' earlier in the same sentence.**
+
+**We added in Figure 6 that the standard deviation for the visualized example is 2.**
+
+**We added some clarification when describing Figure 12, replacing** 'the two second generation *p*-values associated with the observed correlations at *r* = -0.45 and *r* = 0.45 are larger than 50%' **with** 'the proportion of the confidence interval that overlaps with the equivalence range is larger than 50% when the observed correlations are *r* = -.45 and *r* = .45, meaning that the two second generation p-values associated with these correlations are larger than 50%.'
+
+**In the conclusion, we noted that p-values from TOST are more consistent, and easier to interpret. Upon re-reading our manuscript, we chose to delete the 'and easier to interpret' part of that sentence, since this is an empirical claim, and we have no data to support it, and is not relevant for the points we make.**
 
 \newpage
 
